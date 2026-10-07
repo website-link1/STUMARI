@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>STUMARI v4 ✅ — грузинское застолье в Самарканде</title>
+<meta name="description" content="Stumari — грузинский ресторан в Самарканде, ул. Орзу Махмудов 14. Все блюда 49 000 сум, 0% обслуживание. Бронирование: (94) 540-35-05">
+<style>
+:root{
+  --bg:#0d0a12;--bg2:#171021;--card:#1c1428;--line:rgba(232,182,76,.32);
+  --fire:#ff5c38;--fire2:#ff9a5c;--gold:#e8b64c;--gold2:#f7dc96;--cream:#fdf6e9;--mut:#a89ebd;--green:#27b45e;
+  --blobSpeed:26s;--ornaOp:.05;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:700px;margin:0 auto;padding:0 18px;position:relative;z-index:3}
+section{padding:60px 0;position:relative;content-visibility:auto;contain-intrinsic-size:auto 480px}
+h2{font-family:Georgia,serif;font-size:31px;letter-spacing:.5px}
+.sub{color:var(--gold);font-style:italic;font-family:Georgia,serif;margin:6px 0 24px}
+/* ЖИВОЙ ФОН — без filter: blur (GPU-только transform-анимации) */
+.blob{position:fixed;border-radius:50%;opacity:.55;z-index:0;pointer-events:none;will-change:transform}
+.b1{width:70vw;height:70vw;background:radial-gradient(circle,rgba(255,92,56,.30) 0%,rgba(255,92,56,.10) 38%,transparent 66%);top:-20vw;left:-25vw;animation:drift1 var(--blobSpeed) ease-in-out infinite}
+.b2{width:60vw;height:60vw;background:radial-gradient(circle,rgba(232,182,76,.26) 0%,rgba(232,182,76,.09) 38%,transparent 66%);top:30vh;right:-30vw;animation:drift2 calc(var(--blobSpeed)*1.25) ease-in-out infinite}
+.b3{width:65vw;height:65vw;background:radial-gradient(circle,rgba(150,60,200,.18) 0%,rgba(150,60,200,.06) 38%,transparent 66%);bottom:-25vw;left:-15vw;animation:drift3 calc(var(--blobSpeed)*1.45) ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate3d(0,0,0)}33%{transform:translate3d(9vw,7vh,0)}66%{transform:translate3d(-4vw,14vh,0)}}
+@keyframes drift2{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-12vw,18vh,0)}}
+@keyframes drift3{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(14vw,-12vh,0)}}
+#dust{position:fixed;inset:0;z-index:1;pointer-events:none}
+.orna{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 4l7 17 17 7-17 7-7 17-7-17-17-7 17-7z' fill='%23e8b64c'/%3E%3C/svg%3E");background-size:56px 56px;opacity:var(--ornaOp)}
+/* PRELOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:4000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .6s,visibility .6s}
+@keyframes loaderKill{to{opacity:0;visibility:hidden}}
+#loader{animation:loaderKill .6s 4s forwards}
+#loader.done{opacity:0;visibility:hidden}
+#loader .lg{font-family:Georgia,serif;font-size:46px;letter-spacing:9px;background:linear-gradient(90deg,#8a6a2f,var(--gold2),#fff2cf,var(--gold2),#8a6a2f);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 2s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+#loader .bar{width:190px;height:3px;background:#2a2140;border-radius:3px;overflow:hidden}
+#loader .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fire),var(--gold));animation:load 1.1s ease forwards}
+@keyframes load{to{width:100%}}
+#loader small{color:var(--mut);letter-spacing:4px;font-size:11px}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--fire),var(--gold));z-index:3500}
+/* TOPBAR — без backdrop-filter */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:3000;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(13,10,18,.88)}
+.topbar .brand{font-family:Georgia,serif;font-size:20px;letter-spacing:4px;color:var(--gold2);user-select:none}
+.langs{display:flex;gap:5px}
+.langs button{padding:6px 8px;border-radius:9px;border:1px solid var(--line);background:rgba(232,182,76,.06);font-size:19px;line-height:1;cursor:pointer;transition:transform .15s,border-color .15s}
+.langs button.on{border-color:var(--gold);background:rgba(232,182,76,.18);transform:scale(1.1)}
+#musicBtn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--gold);font-size:17px;cursor:pointer;margin-left:6px;will-change:transform}
+#musicBtn.playing{animation:btnPulse 1.6s ease-in-out infinite;background:var(--gold);color:#231a05}
+@keyframes btnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+/* HERO */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden;position:relative;perspective:900px;padding-top:70px;content-visibility:visible}
+.hero .inner{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;padding:0 18px}
+.floaty{position:absolute;font-size:52px;z-index:2;will-change:transform;animation:bob 6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+h1.logo{font-family:Georgia,serif;font-size:clamp(56px,16vw,90px);letter-spacing:9px;line-height:1;background:linear-gradient(180deg,#fff 15%,var(--gold2) 55%,var(--gold) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;animation:heroIn 1.2s .3s cubic-bezier(.2,.9,.3,1.2) both;will-change:transform;user-select:none;cursor:pointer}
+@keyframes heroIn{from{opacity:0;transform:rotateX(60deg) translateY(60px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.kicker{font-size:13px;letter-spacing:4px;color:var(--gold2);animation:fadeUp 1s .2s both}
+.tagline{font-family:Georgia,serif;font-style:italic;font-size:clamp(19px,5.5vw,25px);color:var(--fire2);margin-top:10px;animation:fadeUp 1s .5s both}
+.rate-chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px;animation:fadeUp 1s .6s both}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid var(--line);padding:10px 15px;border-radius:50px;font-size:13px}
+.chip b{color:var(--gold2)}
+.chip .g{color:#4da3ff}.chip .y{color:#ff6a4d}
+.offer{margin-top:24px;padding:17px 32px;border-radius:20px;font-weight:800;font-size:clamp(18px,5vw,22px);background:linear-gradient(135deg,var(--fire),#d63c1c);animation:fadeUp 1s .7s both,offerPulse 2.6s ease-in-out 1.6s infinite;box-shadow:0 14px 44px rgba(255,92,56,.4);will-change:transform}
+.offer small{display:block;font-weight:600;font-size:11.5px;letter-spacing:3px;opacity:.95;margin-top:4px}
+@keyframes offerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+.btns{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp 1s .85s both}
+.btn{padding:15px 28px;border-radius:60px;font-size:16.5px;font-weight:700;transition:transform .15s;position:relative;overflow:hidden;border:none;cursor:pointer;font-family:inherit;display:inline-block}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#c9922e);color:#231a05}
+.btn-gold::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);animation:sweep 3.2s ease-in-out infinite}
+@keyframes sweep{0%{left:-80%}60%,100%{left:135%}}
+.btn-call{background:linear-gradient(135deg,#2fbf62,#128c4b);color:#fff}
+.btn-ghost{border:2px solid var(--gold);color:var(--gold2);background:rgba(232,182,76,.07)}
+.btn:active{transform:scale(.96)}
+.scrollhint{position:absolute;bottom:22px;left:50%;color:var(--mut);font-size:11px;letter-spacing:3px;animation:hint 2s infinite;z-index:4}
+@keyframes hint{0%,100%{transform:translate(-50%,0);opacity:.55}50%{transform:translate(-50%,10px);opacity:1}}
+/* MARQUEE */
+.marquee{overflow:hidden;background:linear-gradient(90deg,var(--fire),#d63c1c);padding:13px 0;transform:rotate(-1.2deg) scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.45);position:relative;z-index:5}
+.marquee .in{display:flex;gap:44px;white-space:nowrap;animation:mq 18s linear infinite;font-weight:800;letter-spacing:2px;font-size:15px;width:max-content;will-change:transform}
+@keyframes mq{to{transform:translate3d(-50%,0,0)}}
+/* SEARCH + TABS */
+.searchbox{position:relative;margin-bottom:16px}
+.searchbox input{width:100%;padding:16px 18px 16px 46px;border-radius:16px;border:1px solid var(--line);background:rgba(20,14,34,.85);color:var(--cream);font-size:16px;font-family:inherit}
+.searchbox input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,182,76,.15)}
+.searchbox .sic{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:19px;opacity:.6}
+.tabs{display:flex;gap:12px;margin-bottom:22px}
+.tabs button{flex:1;padding:15px;font-size:17px;font-weight:800;border-radius:14px;border:2px solid var(--gold);background:rgba(232,182,76,.04);color:var(--gold);cursor:pointer;transition:transform .15s}
+.tabs button.on{background:linear-gradient(135deg,var(--gold),#c9922e);color:#231a05;box-shadow:0 10px 28px rgba(232,182,76,.4)}
+/* CARDS */
+.tilt{transform-style:preserve-3d;will-change:transform}
+.card{background:linear-gradient(165deg,var(--card),#120c1e);border:1px solid var(--line);border-radius:22px;padding:22px 20px;position:relative;overflow:hidden;box-shadow:0 22px 55px rgba(0,0,0,.5);margin-bottom:14px}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(232,182,76,.13),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover::after{opacity:1}
+.card h4{font-family:Georgia,serif;color:var(--gold);font-size:20px;margin-bottom:12px}
+.dish{display:flex;gap:14px;align-items:flex-start}
+.dish .ic{font-size:38px}
+.dish .nm{font-family:Georgia,serif;font-size:18px;color:var(--cream);font-weight:700}
+.dish .ds{font-size:13.5px;color:var(--mut);margin-top:4px;line-height:1.45}
+.dish .pr{margin-left:auto;white-space:nowrap;font-weight:800;color:var(--gold2);font-size:16px;background:rgba(232,182,76,.1);border:1px solid var(--line);padding:8px 12px;border-radius:12px;align-self:center}
+.grhead{font-family:Georgia,serif;color:var(--fire2);font-size:16px;letter-spacing:3px;margin:22px 0 12px;text-transform:uppercase;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.empty{color:var(--mut);text-align:center;padding:30px 0;font-style:italic}
+/* ABOUT / CONTACTS */
+.about p{color:var(--mut);line-height:1.75;font-size:15.5px;margin-bottom:14px}
+.crow{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(165deg,var(--card),#120c1e);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px}
+.crow .ci{font-size:26px}
+.crow b{color:var(--gold2);display:block;margin-bottom:3px}
+.crow span{color:var(--mut);font-size:14.5px}
+footer{padding:36px 0 46px;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line);position:relative;z-index:3}
+footer .fb{font-family:Georgia,serif;letter-spacing:5px;color:var(--gold);font-size:18px;margin-bottom:8px}
+/* FLOATING CALL */
+#fab{position:fixed;right:18px;bottom:18px;z-index:2900;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2fbf62,#128c4b);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 12px 34px rgba(18,140,75,.55);animation:fabPulse 2.4s infinite;will-change:transform}
+@keyframes fabPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+/* ADMIN */
+#admin{position:fixed;inset:0;z-index:5000;background:rgba(8,6,12,.97);display:none;overflow-y:auto}
+#admin.open{display:block}
+.adm-wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+.adm-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(8,6,12,.97);padding:14px 0;z-index:10;border-bottom:1px solid var(--line);margin-bottom:18px}
+.adm-head h3{font-family:Georgia,serif;color:var(--gold);letter-spacing:3px}
+.adm-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.adm-tabs button{padding:10px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(232,182,76,.05);color:var(--gold2);font-weight:700;font-size:13px;cursor:pointer}
+.adm-tabs button.on{background:var(--gold);color:#231a05}
+.adm-sec{display:none}
+.adm-sec.on{display:block;animation:fadeUp .35s both}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12px;color:var(--mut);letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase}
+.fld input,.fld textarea,.fld select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#161022;color:var(--cream);font-size:14.5px;font-family:inherit}
+.fld input[type=color]{height:46px;padding:4px;cursor:pointer}
+.fld textarea{min-height:64px;resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--gold)}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=range]{accent-color:var(--gold);width:100%}
+.adm-item{background:#161022;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.adm-item summary{cursor:pointer;font-weight:700;color:var(--gold2);font-size:14.5px;user-select:none}
+.adm-item .del{margin-top:8px;padding:8px 14px;border-radius:9px;border:1px solid #a33;background:rgba(255,60,60,.12);color:#ff8a8a;font-size:12.5px;cursor:pointer;font-weight:700}
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.tpl{padding:14px 10px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(165deg,#1c1428,#120c1e);color:var(--cream);cursor:pointer;text-align:center;font-weight:700;font-size:13px;transition:transform .15s,border-color .15s}
+.tpl:hover{transform:translateY(-3px);border-color:var(--gold)}
+.tpl .te{display:block;font-size:26px;margin-bottom:6px}
+.tpl small{display:block;color:var(--mut);font-weight:400;margin-top:3px;font-size:11px}
+.adm-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.adm-actions button{padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--gold2);font-weight:700;cursor:pointer;font-size:13.5px}
+.adm-actions .danger{border-color:#a33;color:#ff8a8a;background:rgba(255,60,60,.08)}
+.adm-actions .ok{background:linear-gradient(135deg,var(--gold),#c9922e);color:#231a05;border-color:var(--gold)}
+.note{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.6}
+.trk{display:flex;align-items:center;gap:10px;background:#161022;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:8px;font-size:13.5px}
+.trk .tn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trk button{padding:6px 12px;border-radius:8px;border:1px solid #a33;background:rgba(255,60,60,.12);color:#ff8a8a;font-size:12px;cursor:pointer;font-weight:700}
+#admGate{position:fixed;inset:0;z-index:6000;background:rgba(8,6,12,.97);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#admGate.open{display:flex}
+#admGate input{padding:14px 18px;border-radius:14px;border:1px solid var(--gold);background:#161022;color:var(--cream);font-size:17px;text-align:center;width:220px}
+#admGate .err{color:#ff8a8a;font-size:13px;min-height:18px}
+@media(max-width:480px){.fld-row{grid-template-columns:1fr}}
+
+/* FORMS & NEW SECTIONS */
+.frm{display:grid;gap:14px}
+.frm .fl{display:block}
+.frm .fl span{display:block;font-size:12px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;margin-bottom:6px}
+.frm input,.frm select,.frm textarea{width:100%;padding:15px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(20,14,34,.85);color:var(--cream);font-size:16px;font-family:inherit}
+.frm input:focus,.frm select:focus,.frm textarea:focus{outline:none;border-color:var(--gold)}
+.err-b{border-color:#ff6a6a!important}
+.frm .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.okcard{display:none;text-align:center;padding:30px 20px;border-radius:22px;border:1px solid var(--green);background:rgba(39,180,94,.08)}
+.okcard.on{display:block;animation:fadeUp .4s both}
+.okcard .big{font-size:52px}
+.okcard b{color:var(--gold2);font-family:Georgia,serif;font-size:20px;display:block;margin:10px 0 6px}
+.okcard p{color:var(--mut);font-size:14px}
+.rate-big{font-family:Georgia,serif;font-size:76px;color:var(--gold);line-height:1}
+.stars{color:var(--gold);font-size:30px;letter-spacing:6px;margin:8px 0}
+.rate-note{color:var(--mut);font-size:15px;margin-bottom:20px}
+.btn-white{background:#fff;color:#1a1a2e}
+.btn-red{background:linear-gradient(135deg,#ff5c38,#d63c1c);color:#fff}
+.vacchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.vacchips span{padding:8px 14px;border-radius:50px;border:1px solid var(--line);background:rgba(232,182,76,.07);font-size:13px;color:var(--gold2)}
+.grhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.grb{white-space:nowrap;font-size:12px;color:var(--fire2);border:1px solid var(--line);padding:4px 10px;border-radius:50px;background:rgba(255,92,56,.1);letter-spacing:1px}
+.dish .wt{font-size:12px;color:var(--mut);margin-left:8px;white-space:nowrap}
+.ornpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:10px}
+.ornpick button{height:64px;border-radius:12px;border:2px solid var(--line);cursor:pointer;background-repeat:repeat;background-color:#161022}
+.ornpick button.on{border-color:var(--gold)}
+.reqitem{background:#161022;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+.reqitem .rb{flex:1}
+.reqitem .rt{color:var(--cream)}
+.reqitem .rm{color:var(--mut);font-size:12px;margin-top:3px}
+.reqitem button{padding:5px 10px;border-radius:8px;border:1px solid #a33;background:rgba(255,60,60,.12);color:#ff8a8a;font-size:12px;cursor:pointer;font-weight:700}
+@media(max-width:480px){.frm .frow{grid-template-columns:1fr}}
+
+
+/* CATEGORY TILES */
+.catiles{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.catiles::-webkit-scrollbar{display:none}
+.catile{min-width:128px;height:86px;border-radius:18px;position:relative;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px;cursor:pointer;flex:0 0 auto;transition:transform .15s;text-align:left}
+.catile:active{transform:scale(.96)}
+.catile.on{outline:2.5px solid var(--gold);transform:scale(1.04)}
+.catile .ce{font-size:26px;position:absolute;top:8px;right:10px;opacity:.92;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.catile .cn{font-family:Georgia,serif;font-weight:700;font-size:14px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.65);line-height:1.15}
+.catile .cc{font-size:11px;color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+
+
+/* BOOKING CHIPS + STEPPER */
+.chiprow{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chiprow::-webkit-scrollbar{display:none}
+.dchip{flex:0 0 auto;min-width:76px;padding:9px 12px;border-radius:14px;border:1.5px solid var(--line);background:rgba(20,14,34,.85);color:var(--mut);font-size:12.5px;cursor:pointer;text-align:center;line-height:1.25;transition:transform .12s,border-color .12s}
+.dchip:active{transform:scale(.94)}
+.dchip b{display:block;color:var(--cream);font-size:15px;font-family:Georgia,serif;margin-bottom:2px}
+.dchip.on{border-color:var(--gold);background:rgba(232,182,76,.16);color:var(--gold2)}
+.dchip.on b{color:var(--gold2)}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1.5px solid var(--line);border-radius:16px;background:rgba(20,14,34,.85);padding:8px 10px}
+.stepper button{width:54px;height:54px;border-radius:13px;border:1.5px solid var(--gold);background:rgba(232,182,76,.08);color:var(--gold2);font-size:27px;font-weight:800;cursor:pointer;line-height:1;transition:transform .1s;font-family:inherit}
+.stepper button:active{transform:scale(.9)}
+.gval{text-align:center;min-width:70px}
+.gval b{font-size:31px;color:var(--gold2);font-family:Georgia,serif;line-height:1}
+.gval span{display:block;font-size:10.5px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;margin-top:3px}
+.frm select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23e8b64c' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+/* DISH CARD LAYOUT FIX */
+.dish>div{min-width:0;flex:1}
+.dish .pr{flex-shrink:0}
+.dish .nm{overflow-wrap:break-word}
+/* HERO FLOATIES: keep clear of text on phones */
+@media(max-width:480px){
+  .floaty{font-size:36px;opacity:.45}
+  .floaty:nth-child(n+4){display:none}
+}
+
+
+/* GUESTS SLIDER — термометр компании */
+.guests{display:flex;flex-direction:column;gap:10px;border:1.5px solid var(--line);border-radius:18px;background:rgba(20,14,34,.85);padding:16px 18px 12px}
+.gtop{display:flex;align-items:center;gap:14px}
+.gface{font-size:42px;line-height:1;transition:transform .18s;width:56px;text-align:center}
+.gnum b{font-size:34px;color:var(--gold2);font-family:Georgia,serif;line-height:1}
+.gnum span{font-size:13px;color:var(--mut);margin-left:7px;letter-spacing:1px}
+#gRange{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:6px;outline:none;background:linear-gradient(90deg,var(--gold) 3.4%,rgba(232,182,76,.18) 3.4%);cursor:pointer}
+#gRange::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--gold2),var(--gold) 60%,#8a6a2f);border:2px solid #fff3;box-shadow:0 4px 14px rgba(232,182,76,.55);cursor:grab}
+#gRange::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--gold2),var(--gold) 60%,#8a6a2f);border:2px solid #fff3;box-shadow:0 4px 14px rgba(232,182,76,.55);cursor:grab}
+.gscale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--mut);letter-spacing:1px;padding:0 4px}
+
+/* ===== ONLINE ORDER / CART ===== */
+#cartBtn{position:relative;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(232,182,76,.08);font-size:17px;cursor:pointer;margin-left:6px}
+#cartCount{position:absolute;top:-5px;right:-6px;background:var(--fire);color:#fff;font-size:10.5px;font-weight:800;min-width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;padding:0 4px}
+#cartFab{position:fixed;left:18px;bottom:18px;z-index:2900;width:60px;height:60px;border-radius:50%;border:1px solid var(--line);background:linear-gradient(135deg,var(--gold),#c9922e);font-size:25px;cursor:pointer;box-shadow:0 12px 34px rgba(201,146,46,.5);animation:fabPulse 2.4s infinite}
+#cartFab b{position:absolute;top:-4px;right:-4px;background:var(--fire);color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:50%;display:none;align-items:center;justify-content:center;padding:0 5px}
+.prcol{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;align-self:center}
+.addbtn{border:1.5px solid var(--line);background:rgba(232,182,76,.1);color:var(--gold2);font-weight:800;font-size:16px;border-radius:11px;width:38px;height:38px;cursor:pointer;line-height:1}
+.addbtn:active{transform:scale(.88)}
+.modal{position:fixed;inset:0;z-index:5200;background:rgba(8,6,12,.92);display:none;align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}
+.mbox{width:100%;max-width:480px;max-height:90svh;overflow-y:auto;background:linear-gradient(165deg,var(--card),#120c1e);border:1px solid var(--line);border-radius:22px;padding:22px 18px;position:relative}
+.mbox h3{font-family:Georgia,serif;color:var(--gold);font-size:22px;margin-bottom:14px;text-align:center}
+.mclose{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--mut);font-size:22px;cursor:pointer}
+.crow2{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.crow2 .cinfo{flex:1;min-width:0}
+.crow2 .cname{font-weight:700;font-size:14.5px}
+.crow2 .cprice{color:var(--mut);font-size:12.5px;margin-top:2px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:30px;height:30px;border-radius:9px;border:1.5px solid var(--line);background:rgba(232,182,76,.08);color:var(--gold2);font-weight:800;font-size:16px;cursor:pointer}
+.qty span{min-width:20px;text-align:center;font-weight:800}
+.otabs{display:flex;gap:8px;margin:14px 0 12px}
+.otabs button{flex:1;padding:12px;border-radius:12px;border:2px solid var(--line);background:rgba(20,14,34,.85);color:var(--mut);font-weight:800;font-size:13.5px;cursor:pointer}
+.otabs button.on{border-color:var(--gold);color:var(--gold2);background:rgba(232,182,76,.12)}
+#cartModal input,#cartModal select,#cartModal textarea{width:100%;padding:13px 14px;border-radius:13px;border:1px solid var(--line);background:rgba(20,14,34,.85);color:var(--cream);font-size:15px;font-family:inherit;margin-bottom:10px}
+#cartModal input:focus,#cartModal select:focus,#cartModal textarea:focus{outline:none;border-color:var(--gold)}
+.trs{margin-top:8px}
+.trs .tr{display:flex;justify-content:space-between;padding:6px 2px;font-size:14px;color:var(--mut)}
+.trs .tr b{color:var(--gold2);font-size:17px}
+#toast{position:fixed;top:64px;left:50%;transform:translate(-50%,-90px);background:linear-gradient(135deg,var(--gold),#c9922e);color:#231a05;font-weight:800;padding:12px 22px;border-radius:50px;z-index:5600;transition:transform .35s;box-shadow:0 10px 30px rgba(0,0,0,.5);font-size:14px;max-width:88vw;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+
+/* PERF: kill loader anims after done; no tap delay / highlight */
+#loader.done *{animation:none!important}
+button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
+</style>
+<script>
+window.__v="v4";
+(function(){
+  try{ localStorage.setItem("__t","1"); localStorage.removeItem("__t"); return; }catch(e){}
+  var mem={};
+  Object.defineProperty(window,"localStorage",{value:{
+    getItem:function(k){return (k in mem)?mem[k]:null;},
+    setItem:function(k,v){mem[String(k)]=String(v);},
+    removeItem:function(k){delete mem[k];},
+    clear:function(){mem={};}
+  }});
+})();
+window.addEventListener("error",function(e){
+  try{
+    var b=document.getElementById("errBox");
+    if(!b){b=document.createElement("div");b.id="errBox";
+      b.style.cssText="position:fixed;top:0;left:0;right:0;z-index:999999;background:#c0392b;color:#fff;font:13px monospace;padding:12px 14px;white-space:pre-wrap";
+      (document.body||document.documentElement).appendChild(b);}
+    b.style.display="block";
+    b.textContent="["+(window.__v||"?")+"] JS: "+(e.message||(e.error&&e.error.message)||"error")+" @ "+String(e.filename||"").split("/").pop()+":"+(e.lineno||"?");
+  }catch(x){}
+},true);
+window.addEventListener("load",function(){setTimeout(function(){
+  var l=document.getElementById("loader"); if(l) l.classList.add("done");
+},1500);});
+</script>
+<style>#errBox{display:none}
+#bootBadge{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:4900;background:linear-gradient(135deg,#27b45e,#128c4b);color:#fff;font-weight:800;font-size:13.5px;padding:11px 20px;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:badgeFade .8s 8s forwards;white-space:nowrap;max-width:92vw}
+@keyframes badgeFade{to{opacity:0;visibility:hidden}}
+</style>
+<noscript><div style="position:fixed;inset:0;background:#8e1b1b;color:#fff;z-index:999999;padding:46px 22px;font:16px/1.6 sans-serif">⚠️ Вы открыли файл в программе без поддержки JavaScript.<br><br>Сайт не может работать в таком просмотрщике.<br><br><b>Что делать:</b> скачайте файл полностью → откройте его через приложение <b>Chrome</b> (Android) или <b>Safari</b> (iPhone).</div></noscript>
+</head>
+<body>
+<div id="bootBadge">✅ STUMARI v4 — сайт работает</div>
+<div id="loader"><div class="lg">STUMARI</div><div class="bar"><i></i></div><small>ГРУЗИНСКОЕ ЗАСТОЛЬЕ</small></div>
+<div id="prog"></div>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<canvas id="dust"></canvas>
+<div class="orna"></div>
+
+<header class="topbar">
+  <div class="brand" id="brandTap">STUMARI</div>
+  <div style="display:flex;align-items:center">
+    <div class="langs">
+      <button data-lang="ru" class="on" title="Русский">🇷🇺</button>
+      <button data-lang="en" title="English">🇬🇧</button>
+      <button data-lang="uz" title="O‘zbek">🇺🇿</button>
+      <button data-lang="ka" title="ქართული">🇬🇪</button>
+    </div>
+    <button id="musicBtn" title="Music">♪</button>
+    <button id="cartBtn" title="Корзина">🧺<b id="cartCount">0</b></button>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div id="floaters"></div>
+  <div class="inner">
+    <div class="kicker" data-i="kicker">ГРУЗИНСКИЙ РЕСТОРАН · САМАРКАНД</div>
+    <h1 class="logo" id="logoTap">STUMARI</h1>
+    <div class="tagline" data-i="tagline">Грузинское застолье в сердце Самарканда</div>
+    <div class="rate-chips">
+      <span class="chip"><span class="g">G</span> Google <b>4.9★</b></span>
+      <span class="chip"><span class="y">◆</span> TripAdvisor <b>5.0</b></span>
+      <span class="chip">✓ <b data-i="chip0">0% обслуживание</b></span>
+    </div>
+    <div class="offer"><span data-i="offer">ВСЕ БЛЮДА — 49 000 СУМ</span><small data-i="offerSub">0% ОБСЛУЖИВАНИЕ · БЕЗ СКРЫТЫХ СБОРОВ</small></div>
+    <div class="btns">
+      <a class="btn btn-gold" href="#booking" data-i="book">Забронировать стол</a>
+      <a class="btn btn-call" href="tel:+998945403505" data-i="call">Позвонить</a>
+    </div>
+  </div>
+  <div class="scrollhint" data-i="scroll">ЛИСТАЙТЕ ВНИЗ ▾</div>
+</section>
+
+<div class="marquee"><div class="in" id="mq"></div></div>
+
+<section id="menu">
+  <div class="wrap">
+    <h2 data-i="menuTitle">Меню</h2>
+    <div class="sub" data-i="menuSub">Вся кухня — по одной честной цене</div>
+    <div class="searchbox"><span class="sic">🔍</span><input id="search" data-i-ph="searchPh" placeholder="Найти блюдо..."></div>
+    <div class="tabs">
+      <button id="tabFood" class="on" data-i="tabFood">Кухня</button>
+      <button id="tabDrinks" data-i="tabDrinks">Бар</button>
+    </div>
+    <div class="catiles" id="catTiles"></div>
+    <div id="menuList"></div>
+  </div>
+</section>
+
+
+<section id="booking">
+  <div class="wrap">
+    <h2 data-i="bookT">Бронирование</h2>
+    <div class="sub" data-i="bookSub">Оставьте заявку — подтвердим за 10 минут</div>
+    <form class="frm card" id="bookForm" novalidate>
+      <label class="fl"><span data-i="fName">Имя</span><input id="bName" data-i-ph="fNamePh" placeholder="Ваше имя" autocomplete="name"></label>
+      <label class="fl"><span data-i="fPhone">Телефон</span><input id="bPhone" type="tel" inputmode="tel" placeholder="+998 __ ___ __ __" autocomplete="tel"></label>
+      <div class="frow">
+        <label class="fl"><span data-i="fDate">Дата</span><input id="bDate" type="date"></label>
+        <label class="fl"><span data-i="fTime">Время</span><select id="bTime"></select></label>
+      </div>
+      <label class="fl"><span data-i="fGuests">Гости</span>
+        <div class="guests">
+          <div class="gtop">
+            <div class="gface" id="gFace">👫</div>
+            <div class="gnum"><b id="gNum">2</b><span id="gPers">гостя</span></div>
+          </div>
+          <input type="range" id="gRange" min="1" max="30" step="1" value="2">
+          <div class="gscale"><span>1</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span></div>
+        </div>
+      </label>
+      <button class="btn btn-gold" type="submit" data-i="bookBtn" style="width:100%">Забронировать</button>
+    </form>
+    <div class="okcard" id="bookOk"><div class="big">✅</div><b data-i="bookOk">Заявка принята!</b><p data-i="bookOkT">Мы перезвоним для подтверждения в течение 10 минут.</p>
+      <div class="btns" style="margin-top:16px;animation:none"><a class="btn btn-call" href="tel:+998945403505" data-i="call">Позвонить</a></div>
+      <button type="button" id="bookAgain" class="btn btn-ghost" data-i="again" style="margin-top:12px;padding:10px 22px;font-size:14px">Отправить ещё одну</button>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <h2 data-i="aboutTitle">О ресторане</h2>
+    <div class="sub" data-i="aboutSub">Тамада, тосты и настоящая грузинская душа</div>
+    <p data-i="aboutText1">STUMARI — это грузинское застолье по всем правилам: печь с живым огнём, хачапури, которые подают горячими, хинкали, которые едят руками, и застолье, на котором каждый гость — тамада.</p>
+    <p data-i="aboutText2">Мы убрали сложные цены: каждое блюдо стоит 49 000 сум, а обслуживание — всегда 0%. Просто выбирайте, что любите.</p>
+  </div>
+</section>
+
+
+<section id="vacancies">
+  <div class="wrap">
+    <h2 data-i="vacT">Вакансии</h2>
+    <div class="sub" data-i="vacSub">Присоединяйтесь к команде Stumari</div>
+    <div class="vacchips" id="vacList"></div>
+    <div class="card"><b style="font-family:Georgia,serif;color:var(--gold);font-size:18px" data-i="vacFormT">Откликнуться</b>
+      <form class="frm" id="vacForm" novalidate style="margin-top:14px">
+        <label class="fl"><span data-i="fName">Имя</span><input id="vName" data-i-ph="fNamePh" placeholder="Ваше имя" autocomplete="name"></label>
+        <label class="fl"><span data-i="fPhone">Телефон</span><input id="vPhone" type="tel" inputmode="tel" placeholder="+998 __ ___ __ __" autocomplete="tel"></label>
+        <label class="fl"><span data-i="vacPos">Позиция</span><select id="vPos"></select></label>
+        <label class="fl"><span data-i="vacAbout">О себе (необязательно)</span><textarea id="vAbout" data-i-ph="vacAboutPh" placeholder="Коротко о вашем опыте"></textarea></label>
+        <button class="btn btn-gold" type="submit" style="width:100%" data-i="vacBtn">Откликнуться</button>
+      </form>
+      <div class="okcard" id="vacOk"><div class="big">🎉</div><b data-i="vacOk">Отклик отправлен!</b><p data-i="vacOkT">Мы свяжемся с вами в ближайшее время.</p>
+      <button type="button" id="vacAgain" class="btn btn-ghost" data-i="again" style="margin-top:12px;padding:10px 22px;font-size:14px">Отправить ещё одну</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <h2 data-i="revT">Нам важно ваше мнение</h2>
+    <div class="sub" data-i="revSub">Спасибо, что выбираете Stumari</div>
+    <div class="card" style="text-align:center">
+      <div class="stars">★★★★★</div>
+      <div class="rate-big">5,0</div>
+      <div class="rate-note" data-i="revCount">610 отзывов на Google Maps — лучший результат в Самарканде</div>
+      <div class="btns" style="animation:none;margin-top:6px">
+        <a class="btn btn-white" id="gBtn" href="#" target="_blank" rel="noopener" data-i="gBtn">Оценить на Google</a>
+        <a class="btn btn-red" id="yBtn" href="#" target="_blank" rel="noopener" data-i="yBtn">Оценить на Яндекс</a>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <b style="font-family:Georgia,serif;color:var(--gold);font-size:18px" data-i="fbT">Помогите нам стать лучше</b>
+      <p style="color:var(--mut);font-size:13.5px;margin:6px 0 12px" data-i="fbSub">Что-то не понравилось? Напишите напрямую владельцу — исправим.</p>
+      <textarea id="fbText" style="width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(20,14,34,.85);color:var(--cream);font-size:15px;font-family:inherit;min-height:90px;resize:vertical" data-i-ph="fbPh" placeholder="Ваши пожелания или рекомендации..."></textarea>
+      <button class="btn btn-gold" id="fbBtn" style="width:100%;margin-top:12px" data-i="fbBtn">Отправить анонимно</button>
+      <div class="okcard" id="fbOk" style="margin-top:14px"><div class="big">💌</div><b data-i="fbOk">Сообщение отправлено!</b><p data-i="fbOkT">Спасибо, что помогаете нам расти.</p>
+      <button type="button" id="fbAgain" class="btn btn-ghost" data-i="again" style="margin-top:12px;padding:10px 22px;font-size:14px">Отправить ещё одну</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts">
+  <div class="wrap">
+    <h2 data-i="contactsTitle">Контакты</h2>
+    <div class="sub" data-i="contactsSub">Мы ждём вас каждый день</div>
+    <div class="crow"><div class="ci">📍</div><div><b data-i="addrL">Адрес</b><span data-i="address">г. Самарканд, ул. Орзу Махмудов, 14</span></div></div>
+    <div class="crow"><div class="ci">📞</div><div><b data-i="phoneL">Телефон</b><span>(94) 540-35-05</span></div></div>
+    <div class="crow"><div class="ci">🕚</div><div><b data-i="hoursL">Часы работы</b><span data-i="hours">Ежедневно 11:00 – 23:00</span></div></div>
+    <div class="btns" style="animation:none;margin-top:22px">
+      <a class="btn btn-gold" href="tel:+998945403505" data-i="call">Позвонить</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fb">STUMARI</div>
+  <div data-i="footer">Грузинское застолье в Самарканде · Все блюда 49 000 сум · 0% обслуживание</div>
+  <div style="margin-top:10px;font-size:11px;opacity:.6">© 2026 STUMARI · v4 (онлайн-заказ)</div>
+</footer>
+
+<a id="fab" href="tel:+998945403505">📞</a>
+<button id="cartFab" title="Корзина">🧺<b id="cartFabN">0</b></button>
+<div id="toast"></div>
+<audio id="musEl" loop></audio>
+
+<div class="modal" id="cartModal">
+ <div class="mbox">
+  <button class="mclose" id="cartClose">✕</button>
+  <div id="cartView">
+   <h3>🧺 <span data-i="cartT">Ваш заказ</span></h3>
+   <div id="cItems"></div>
+   <div class="trs" id="cTotals"></div>
+   <div class="otabs">
+    <button id="otP" class="on" type="button">🛍️ <span data-i="pickup">Самовывоз</span></button>
+    <button id="otD" type="button">🛵 <span data-i="delivery">Доставка</span> <span id="dFeeLbl"></span></button>
+   </div>
+   <input id="oName" data-i-ph="namePh" placeholder="Ваше имя" autocomplete="name">
+   <input id="oPhone" type="tel" inputmode="tel" data-i-ph="phonePh" placeholder="Телефон" autocomplete="tel">
+   <input id="oAddr" data-i-ph="addrPh" placeholder="Адрес доставки" style="display:none">
+   <select id="oPay">
+    <option value="Наличные" data-i="payCash">Наличные</option>
+    <option value="Карта при получении" data-i="payCard">Карта при получении</option>
+    <option value="PayMe" data-i="payPayme">PayMe</option>
+   </select>
+   <textarea id="oCm" rows="2" data-i-ph="commentPh" placeholder="Комментарий (необязательно)"></textarea>
+   <button class="btn btn-gold" id="placeBtn" style="width:100%" data-i="orderBtn">Оформить заказ</button>
+   <div class="note" data-i="orderHint">Заказ мгновенно попадает в админку сайта (⚙ → 🛒).</div>
+  </div>
+  <div class="okcard" id="orderOk">
+   <div class="big">🍷</div>
+   <b><span data-i="orderOk">Заказ принят!</span> <span id="orderOkNum"></span></b>
+   <p data-i="orderOkT">Заказ уже в админке.</p>
+   <div class="btns" style="animation:none;margin-top:14px;flex-direction:column">
+    <a class="btn btn-call" id="waOrder" target="_blank" rel="noopener" data-i="waBtn">📲 Продублировать в WhatsApp</a>
+    <button type="button" class="btn btn-ghost" id="orderDone" data-i="orderAgain" style="padding:10px 22px;font-size:14px">Готово</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div id="admGate">
+  <div style="font-family:Georgia,serif;font-size:26px;color:var(--gold);letter-spacing:4px">ПАНЕЛЬ РАЗРАБОТЧИКА</div>
+  <input type="password" id="admPass" placeholder="Пароль">
+  <div class="err" id="admErr"></div>
+  <button class="btn btn-gold" id="admEnter">Войти</button>
+</div>
+
+<div id="admin"><div class="adm-wrap">
+  <div class="adm-head"><h3>⚙ STUMARI — ПАНЕЛЬ РАЗРАБОТЧИКА</h3><button class="btn btn-ghost" style="padding:9px 18px" id="admClose">✕ Закрыть</button></div>
+  <div class="adm-tabs" id="admTabs"></div>
+
+  <div class="adm-sec on" data-sec="theme">
+    <div class="fld-row">
+      <div class="fld"><label>Фон (bg)</label><input type="color" id="c_bg"></div>
+      <div class="fld"><label>Карточки (card)</label><input type="color" id="c_card"></div>
+      <div class="fld"><label>Огненный (fire)</label><input type="color" id="c_fire"></div>
+      <div class="fld"><label>Золотой (gold)</label><input type="color" id="c_gold"></div>
+      <div class="fld"><label>Золото светлое (gold2)</label><input type="color" id="c_gold2"></div>
+      <div class="fld"><label>Текст (cream)</label><input type="color" id="c_cream"></div>
+    </div>
+    <div class="fld"><label>Скорость анимации фона (сек)</label><input type="range" id="r_blobSpeed" min="6" max="80" step="1"><div class="note" id="n_blobSpeed"></div></div>
+    <div class="fld"><label>Прозрачность орнамента</label><input type="range" id="r_orna" min="0" max="30" step="1"><div class="note" id="n_orna"></div></div>
+    <div class="fld"><label>Узор орнамента</label><div class="ornpick" id="ornPick"></div></div>
+    <div class="fld"><label>Эмодзи, плавающие в шапке (через запятую)</label><input id="t_floats" placeholder="🧀,🍷,🍢,🥟"></div>
+    <div class="fld"><label>Бегущая строка</label><input id="t_marquee"></div>
+  </div>
+
+  <div class="adm-sec" data-sec="texts">
+    <div class="fld"><label>Язык текста для редактирования</label><select id="txLang"><option value="ru">Русский</option><option value="en">English</option><option value="uz">O‘zbek</option><option value="ka">ქართული</option></select></div>
+    <div id="txFields"></div>
+  </div>
+
+  <div class="adm-sec" data-sec="menu">
+    <div class="fld"><label>Глобальная цена всех блюд (сум)</label><input type="number" id="m_globalPrice" min="1000" step="500"></div>
+    <div class="fld"><label>Добавить блюдо</label>
+      <div class="fld-row"><select id="m_newCat"><option value="food">Кухня</option><option value="drinks">Бар</option></select><input id="m_newGroup" placeholder="Группа (напр. Хачапури)"></div>
+      <input id="m_newName" placeholder="Название (RU)" style="margin-top:10px">
+      <div class="adm-actions" style="margin-top:10px"><button type="button" class="ok" id="m_add">＋ Добавить блюдо</button></div>
+    </div>
+    <div id="m_list"></div>
+  </div>
+
+  <div class="adm-sec" data-sec="fx">
+    <div class="fld"><label>Частицы на фоне</label><select id="f_particles"><option value="none">Нет</option><option value="dust">Пылинки / золото</option><option value="snow">Снег</option><option value="leaves">Листья</option><option value="petals">Лепестки</option><option value="fireflies">Светлячки</option><option value="sparks">Искры костра</option></select></div>
+    <div class="fld"><label>🎵 Музыка из скачанных файлов (можно несколько)</label><input type="file" id="f_files" accept="audio/*" multiple><div class="note">Файлы сохраняются в браузере (IndexedDB) и играют по очереди. Кнопка ♪ — пуск/пауза.</div></div>
+    <div id="f_trackList"></div>
+    <div class="fld"><label>Музыка — URL (играет, если нет загруженных файлов)</label><input id="f_musUrl" placeholder="https://.../music.mp3"></div>
+    <div class="fld"><label>Громкость музыки</label><input type="range" id="f_vol" min="0" max="100"></div>
+    <div class="note">Блобы: <button class="btn btn-ghost" style="padding:7px 14px;font-size:12px" id="f_blobs">Вкл/Выкл светящиеся пятна</button> <button class="btn btn-ghost" style="padding:7px 14px;font-size:12px" id="f_orna">Вкл/Выкл орнамент</button></div>
+  </div>
+
+  <div class="adm-sec" data-sec="tpl">
+    <div class="fld"><label>🎉 Праздники и мероприятия</label></div>
+    <div class="tpl-grid" id="tplHoliday"></div>
+    <div class="fld"><label>🍂 Времена года</label></div>
+    <div class="tpl-grid" id="tplSeason"></div>
+    <div class="fld"><label>📅 Каждый месяц года</label></div>
+    <div class="tpl-grid" id="tplMonth"></div>
+    <div class="note">Шаблон меняет цвета, частицы, эмодзи и настроение сайта одним нажатием.</div>
+  </div>
+
+  <div class="adm-sec" data-sec="sys">
+    <div class="fld"><label>Пароль панели разработчика</label><input id="s_pass" type="text"></div>
+    <div class="fld"><label>Телефон (кликабельный, формат +998...)</label><input id="s_phone"></div>
+    <div class="fld"><label>Адрес</label><input id="s_addr"></div>
+    <div class="fld"><label>Ссылка «Оценить на Google»</label><input id="s_gurl"></div>
+    <div class="fld"><label>Ссылка «Оценить на Яндекс»</label><input id="s_yurl"></div>
+    <div class="fld"><label>Доплата за доставку такси (сум)</label><input type="number" id="s_fee" min="0" step="1000"></div>
+    <div class="adm-actions">
+      <button class="ok" id="s_save">💾 Сохранить всё</button>
+      <button id="s_export">⬇ Экспорт настроек (JSON)</button>
+      <button id="s_import">⬆ Импорт настроек</button>
+      <button class="danger" id="s_reset">🗑 Сбросить всё к заводскому</button>
+      <input type="file" id="s_file" accept=".json" style="display:none">
+    </div>
+    <div class="note" id="s_note"></div>
+  
+  </div>
+
+  <div class="adm-sec" data-sec="reqs">
+    <div class="fld"><label>Заявки с сайта (хранятся в этом браузере)</label></div>
+    <div id="reqsList"></div>
+    <div class="adm-actions"><button class="danger" id="reqClear">🗑 Очистить все заявки</button></div>
+  </div>
+
+  <div class="adm-sec" data-sec="orders">
+    <div class="fld"><label>Онлайн-заказы (самовывоз и доставка) — появляются здесь сразу после оформления на сайте</label></div>
+    <div id="ordersList"></div>
+    <div class="adm-actions"><button class="danger" id="ordersClear">🗑 Очистить все заказы</button></div>
+  </div>
+
+  <div class="adm-sec" data-sec="guide">
+    <div class="note" style="font-size:13.5px;line-height:1.8">
+      <b style="color:var(--gold);font-size:15px">❓ Обучение — как всё устроено</b><br><br>
+      <b>🎨 Цвета и фон</b> — цвета, скорость фона, орнамент, эмодзи в шапке, бегущая строка. Применяется сразу.<br>
+      <b>📝 Тексты</b> — правка любых текстов на 4 языках + названия категорий меню.<br>
+      <b>🍽️ Меню и цены</b> — добавление/правка блюд, глобальная цена, удаление.<br>
+      <b>✨ Эффекты и музыка</b> — частицы, загрузка музыки (хранится в браузере), громкость.<br>
+      <b>🎉 Шаблоны</b> — праздники, времена года и месяцы одним нажатием.<br>
+      <b>📨 Заявки</b> — бронирования, отклики на вакансии, анонимные сообщения.<br>
+      <b>🛒 Онлайн-заказы</b> — заказы из корзины сайта. Кнопка статуса ведёт заказ: 🆕 → ✅ → 🏁.<br>
+      <b>🔧 Система</b> — пароль, телефон, ссылки на карты, цена доставки, экспорт/импорт.<br><br>
+      <b>Как обновить сайт на новую версию БЕЗ потери настроек:</b><br>
+      1) 🔧 Система → <b>⬇ Экспорт настроек (JSON)</b> — сохраните файл.<br>
+      2) Замените файл сайта на новую версию (на хостинге/устройстве).<br>
+      3) Откройте сайт → 5 тапов по логотипу STUMARI → введите пароль → 🔧 Система → <b>⬆ Импорт настроек</b> → выберите сохранённый файл.<br>
+      Все цвета, тексты, меню, музыка и заказы восстановятся.<br><br>
+      <b>Как работает онлайн-заказ (всё внутри сайта, без агрегаторов):</b><br>
+      Гость набирает корзину кнопкой ＋ на блюдах → жмёт 🧺 → выбирает <b>самовывоз</b> (0 сум) или <b>доставку</b> (+цена такси из 🔧 Система) → вводит имя, телефон, адрес, оплату → «Оформить заказ».<br>
+      Заказ <b>мгновенно попадает в ⚙ → 🛒 Онлайн-заказы</b> этой админки и хранится в браузере. Кнопка <b>📲 в карточке заказа</b> отправляет копию менеджеру в WhatsApp — так заказ виден с любого устройства. Для доставки менеджер вызывает курьера Yandex Go / Uzum Taxi за счёт доплаты за доставку — комиссий агрегаторам нет.<br><br>
+      ⚠️ Заявки и заказы хранятся в браузере этого устройства. Хотите увидеть заказ на другом устройстве — нажмите 📲 в карточке заказа.
+    </div>
+  </div>
+</div></div>
+
+<script>
+"use strict";
+/* ==================== I18N ==================== */
+const I18N = {
+ru:{kicker:"ГРУЗИНСКИЙ РЕСТОРАН · САМАРКАНД",tagline:"Грузинское застолье в сердце Самарканда",chip0:"0% обслуживание",offer:"ВСЕ БЛЮДА — 49 000 СУМ",offerSub:"0% ОБСЛУЖИВАНИЕ · БЕЗ СКРЫТЫХ СБОРОВ",book:"Забронировать стол",call:"Позвонить",scroll:"ЛИСТАЙТЕ ВНИЗ ▾",menuTitle:"Меню",menuSub:"Вся кухня — по одной честной цене",searchPh:"Найти блюдо...",tabFood:"Кухня",tabDrinks:"Бар",aboutTitle:"О ресторане",aboutSub:"Тамада, тосты и настоящая грузинская душа",aboutText1:"STUMARI — это грузинское застолье по всем правилам: печь с живым огнём, хачапури, которые подают горячими, хинкали, которые едят руками, и застолье, на котором каждый гость — тамада.",aboutText2:"Мы убрали сложные цены: каждое блюдо стоит 49 000 сум, а обслуживание — всегда 0%. Просто выбирайте, что любите.",contactsTitle:"Контакты",contactsSub:"Мы ждём вас каждый день",addrL:"Адрес",phoneL:"Телефон",hoursL:"Часы работы",address:"г. Самарканд, ул. Орзу Махмудов, 14",hours:"Ежедневно 11:00 – 23:00",footer:"Грузинское застолье в Самарканде · Все блюда 49 000 сум · 0% обслуживание",cur:"сум",marquee:"ВСЕ БЛЮДА 49 000 СУМ ✦ ХАЧАПУРИ ✦ ХИНКАЛИ ✦ МАНГАЛ ✦ ДОМАШНИЕ НАПИТКИ ✦ "},
+en:{kicker:"GEORGIAN RESTAURANT · SAMARKAND",tagline:"A Georgian feast in the heart of Samarkand",chip0:"0% service fee",offer:"ALL DISHES — 49,000 UZS",offerSub:"0% SERVICE FEE · NO HIDDEN CHARGES",book:"Book a table",call:"Call us",scroll:"SCROLL DOWN ▾",menuTitle:"Menu",menuSub:"The whole kitchen at one honest price",searchPh:"Find a dish...",tabFood:"Kitchen",tabDrinks:"Bar",aboutTitle:"About us",aboutSub:"Toasts, tamada and a true Georgian soul",aboutText1:"STUMARI is a Georgian feast done right: a live-fire oven, khachapuri served hot, khinkali eaten by hand, and a table where every guest is a tamada.",aboutText2:"We removed complicated pricing: every dish costs 49,000 UZS and service is always 0%. Just choose what you love.",contactsTitle:"Contacts",contactsSub:"We are waiting for you every day",addrL:"Address",phoneL:"Phone",hoursL:"Opening hours",address:"14 Orzu Mahmudov St., Samarkand",hours:"Daily 11:00 – 23:00",footer:"Georgian feast in Samarkand · All dishes 49,000 UZS · 0% service",cur:"UZS",marquee:"ALL DISHES 49,000 UZS ✦ KHACHAPURI ✦ KHINKALI ✦ BBQ ✦ HOUSE DRINKS ✦ "},
+uz:{kicker:"GRUZIN RESTORANI · SAMARQAND",tagline:"Samarqand markazidagi gruzin dasturxi",chip0:"0% xizmat",offer:"BARCHA TAOMLAR — 49 000 SO‘M",offerSub:"0% XIZMAT · YASHIRIN TO‘LOVLARSIZ",book:"Stol band qilish",call:"Qo‘ng‘iroq qilish",scroll:"ПАСТГА СИЛЖИТИНГ ▾",menuTitle:"Menyu",menuSub:"Butun oshxona — bitta halol narxda",searchPh:"Taom qidirish...",tabFood:"Oshxona",tabDrinks:"Bar",aboutTitle:"Restoran haqida",aboutSub:"Tamada, marhabo va gruzin mehmondo‘stligi",aboutText1:"STUMARI — bu gruzin dasturxoni: jonli olochli tondir, issiq tortiladigan xachapuri, qo‘lda yeyiladigan xinkali va har bir mehmon tamada bo‘lgan dasturxon.",aboutText2:"Murakkab narxlarni olib tashladik: har bir taom 49 000 so‘m, xizmat esa doim 0%. Shunchaki sevganingizni tanlang.",contactsTitle:"Aloqa",contactsSub:"Har kuni sizni kutamiz",addrL:"Manzil",phoneL:"Telefon",hoursL:"Ish vaqti",address:"Samarqand sh., Orzu Maxmudov ko‘chasi, 14",hours:"Har kuni 11:00 – 23:00",footer:"Samarqanddagi gruzin dasturxi · Barcha taomlar 49 000 so‘m · 0% xizmat",cur:"so‘m",marquee:"BARCHA TAOMLAR 49 000 SO‘M ✦ XACHAPURI ✦ XINKALI ✦ KABOB ✦ UY ICHIMLIKLARI ✦ "},
+ka:{kicker:"ქართული რესტორანი · სამარყანდი",tagline:"სამარყანდის გულში ქართული სუფრა",chip0:"0% მომსახურება",offer:"ყველა კერძი — 49 000 სუმი",offerSub:"0% მომსახურება · უსაფრთხო ფასი",book:"მაგიდის დაჯავშნა",call:"დარეკვა",scroll:"ჩამოსქროლეთ ▾",menuTitle:"მენიუ",menuSub:"მთელი სამზარეულო — ერთი სამართლიანი ფასით",searchPh:"კერძის ძებნა...",tabFood:"სამზარეულო",tabDrinks:"ბარი",aboutTitle:"რესტორანის შესახებ",aboutSub:"ტამადა, ტოსტები და ნამდვილი ქართული სული",aboutText1:"STUMARI — ეს არის ქართული სუფრა ყველა წესით: ცოცხალი ცეცხლის ღუმელი, ცხელი ხაჭაპური, ხელით ნაჭამი ხინკალი და სუფრა, სადაც ყველა სტუმარი ტამადაა.",aboutText2:"ჩვენ მოვხსენით რთული ფასები: ყველა კერძი ღირს 49 000 სუმი, მომსახურება — ყოველთვის 0%. უბრალოდ აირჩიეთ საყვარელი.",contactsTitle:"კონტაქტები",contactsSub:"ჩვენ ყოველდღე გელოდებით",addrL:"მისამართი",phoneL:"ტელეფონი",hoursL:"სამუშაო საათები",address:"სამარყანდი, ორზუ მაჰმუდოვის ქ., 14",hours:"ყოველდღე 11:00 – 23:00",footer:"ქართული სუფრა სამარყანდში · ყველა კერძი 49 000 სუმი · 0% მომსახურება",cur:"სუმი",marquee:"ყველა კერძი 49 000 სუმი ✦ ხაჭაპური ✦ ხინკალი ✦ კეინი ✦ სახლის სასმელები ✦ "}
+};
+
+
+/* --- extra keys: booking / vacancies / reviews / feedback --- */
+Object.assign(I18N.ru,{bookT:"Бронирование",bookSub:"Оставьте заявку — подтвердим за 10 минут",fName:"Имя",fNamePh:"Ваше имя",fPhone:"Телефон",fDate:"Дата",fTime:"Время",fGuests:"Гости",bookBtn:"Забронировать",bookOk:"Заявка принята!",bookOkT:"Мы перезвоним для подтверждения в течение 10 минут.",vacT:"Вакансии",vacSub:"Присоединяйтесь к команде Stumari",vacFormT:"Откликнуться",vacPos:"Позиция",vacAbout:"О себе (необязательно)",vacAboutPh:"Коротко о вашем опыте",vacBtn:"Откликнуться",vacOk:"Отклик отправлен!",vacOkT:"Мы свяжемся с вами в ближайшее время.",revT:"Нам важно ваше мнение",revSub:"Спасибо, что выбираете Stumari",revCount:"610 отзывов на Google Maps — лучший результат в Самарканде",gBtn:"Оценить на Google",yBtn:"Оценить на Яндекс",fbT:"Помогите нам стать лучше",fbSub:"Что-то не понравилось? Напишите напрямую владельцу — исправим.",fbPh:"Ваши пожелания или рекомендации...",fbBtn:"Отправить анонимно",fbOk:"Сообщение отправлено!",fbOkT:"Спасибо, что помогаете нам расти.",fillErr:"Заполните выделенные поля"});
+Object.assign(I18N.en,{bookT:"Book a table",bookSub:"Leave a request — we confirm in 10 minutes",fName:"Name",fNamePh:"Your name",fPhone:"Phone",fDate:"Date",fTime:"Time",fGuests:"Guests",bookBtn:"Book now",bookOk:"Request received!",bookOkT:"We will call you back within 10 minutes to confirm.",vacT:"Vacancies",vacSub:"Join the Stumari team",vacFormT:"Apply now",vacPos:"Position",vacAbout:"About you (optional)",vacAboutPh:"Briefly about your experience",vacBtn:"Apply",vacOk:"Application sent!",vacOkT:"We will contact you soon.",revT:"Your opinion matters",revSub:"Thank you for choosing Stumari",revCount:"610 reviews on Google Maps — the best result in Samarkand",gBtn:"Rate on Google",yBtn:"Rate on Yandex",fbT:"Help us become better",fbSub:"Something wrong? Write directly to the owner — we will fix it.",fbPh:"Your wishes or recommendations...",fbBtn:"Send anonymously",fbOk:"Message sent!",fbOkT:"Thank you for helping us grow.",fillErr:"Please fill in the highlighted fields"});
+Object.assign(I18N.uz,{bookT:"Stol band qilish",bookSub:"So‘rov qoldiring — 10 daqiqada tasdiqlaymiz",fName:"Ism",fNamePh:"Ismingiz",fPhone:"Telefon",fDate:"Sana",fTime:"Vaqt",fGuests:"Mehmonlar",bookBtn:"Band qilish",bookOk:"So‘rov qabul qilindi!",bookOkT:"Tasdiqlash uchun 10 daqiqa ichida qo‘ng‘iroq qilamiz.",vacT:"Vakansiyalar",vacSub:"Stumari jamoasiga qo‘shiling",vacFormT:"Ariza yuborish",vacPos:"Lavozim",vacAbout:"O‘zingiz haqingizda (ixtiyoriy)",vacAboutPh:"Tajribangiz haqida qisqacha",vacBtn:"Ariza yuborish",vacOk:"Ariza yuborildi!",vacOkT:"Tez orada siz bilan bog‘lanamiz.",revT:"Fikringiz biz uchun muhim",revSub:"Stumari'ni tanlaganingiz uchun rahmat",revCount:"Google Maps’da 610 ta fikr — Samarqanddagi eng yaxshi natija",gBtn:"Google’da baholash",yBtn:"Yandex’da baholash",fbT:"Yaxshiroq bo‘lishimizga yordam bering",fbSub:"Biror narsa yoqmadi? Egasisga to‘g‘ridan-to‘g‘ri yozing — tuzatamiz.",fbPh:"Takliflaringiz...",fbBtn:"Anonim yuborish",fbOk:"Xabar yuborildi!",fbOkT:"O‘sishimizga yordam berganingiz uchun rahmat.",fillErr:"Ajratilgan maydonlarni to‘ldiring"});
+Object.assign(I18N.ka,{bookT:"მაგიდის დაჯავშნა",bookSub:"დატოვეთ განაცხადი — 10 წუთში დავადასტურებთ",fName:"სახელი",fNamePh:"თქვენი სახელი",fPhone:"ტელეფონი",fDate:"თარიღი",fTime:"დრო",fGuests:"სტუმრები",bookBtn:"დაჯავშნა",bookOk:"განაცხადი მიღებულია!",bookOkT:"10 წუთში დაგირეკავთ დასადასტურებლად.",vacT:"ვაკანსიები",vacSub:"შეუერთდით Stumari-ს გუნდს",vacFormT:"განაცხადის გაგზავნა",vacPos:"პოზიცია",vacAbout:"თქვენ შესახებ (არასავალდებულო)",vacAboutPh:"მოკლედ თქვენი გამოცდილების შესახებ",vacBtn:"გაგზავნა",vacOk:"განაცხადი გაიგზავნა!",vacOkT:"მალე დაგიკავშირდებით.",revT:"თქვენი აზრი მნიშვნელოვანია",revSub:"გმადლობთ, რომ ირჩევთ Stumari-ს",revCount:"610 მიმოხილვა Google Maps-ზე — საუკეთესო შედეგი სამარყანდში",gBtn:"შეაფასეთ Google-ზე",yBtn:"შეაფასეთ Yandex-ზე",fbT:"დაგვეხმარეთ გავუმჯობესდეთ",fbSub:"რამე არ მოეწონათ? მოგვწერეთ პირდაპირ მფლობელს — გავასწორებთ.",fbPh:"თქვენი სურვილები...",fbBtn:"ანონიმურად გაგზავნა",fbOk:"შეტყობინება გაიგზავნა!",fbOkT:"გმადლობთ, რომ გვეხმარებით ზრდაში.",fillErr:"შეავსეთ გამოყოფილი ველები"});
+
+/* ==================== MENU ==================== */
+/* ==================== MENU (полное, из PDF) ==================== */
+const M_RAW=[
+/* cat, group, groupBadge, icon, weight, price, [ru,en,uz,ka], ruDesc, enDesc */
+["food","Супы","49 000","🍲","300 г",49000,["Харчо","Kharcho","Xarcho","ხარჩო"],"Наваристый пикантный говяжий суп с томатами, рисом и кавказскими специями","Rich spicy beef soup with tomatoes, rice and Caucasian spices","Tomat, guruch va kavkaz ziravorlari bilan navarist, achchiq mo‘l go‘shtli sho‘rva","ნავარისტი, პიკანტური სუპი ხარით, ტომატით, ბრინჯითა და კავკასიური სპეციებით"],
+["food","Супы","49 000","🍲","300 г",49000,["Солянка","Solyanka","Solyanka","სოლიანკა"],"Наваристый суп с копчёной говядиной, охотничьими колбасками, маслинами и оливками","Rich soup with smoked beef, hunting sausages, olives","Isli mol go‘shti, ovchilik sosiskalari, zaytun bilan navarist sho‘rva","ნავარისტი სუპი სიგარეტის ხარით, სანადირო სოსისკებით, მასლინითა და ზეთისხილით"],
+["food","Супы","49 000","🍲","300 г",49000,["Горный бульон с мини хинкали","Mountain broth with mini khinkali","Mini xinkalili tog‘ sho‘rva","ბულიონი მინი ხინკალით"],"Мини-хинкали с говядиной в бульоне со свежей зеленью, чесноком и специями","Mini khinkali with beef in broth with fresh herbs and garlic","Mol go‘shtli mini xinkali, yangi ko‘kat, sarimsoq va ziravorlar bilan bulon","მინი ხინკალი ხარით ბულიონში, ახალი მწვანილით, ნიორითა და სპეციებით"],
+["food","Супы","49 000","🍲","300 г",49000,["Кахетинский борщ","Kakhetian borscht","Kaheti borschi","კახური ბორში"],"Густой наваристый суп по домашнему рецепту, с говядиной и свежей зеленью","Thick rich homemade-style soup with beef and fresh herbs","Uy retsepti bo‘yicha mol go‘shti va yangi ko‘katlar bilan quyuq navarist sho‘rva","სქლიანი ნავარისტი სუპი ხარითა და ახალი მწვანილით, კახური ბორში"],
+["food","Супы","49 000","🍲","300 г",49000,["Мерджмек","Merdjmek","Merjimek sho‘rva","მერჯმეკი"],"Нежный суп с лёгкой ореховой ноткой чечевицы и пассерованных овощей","Tender soup with lentils and a light nutty note","Yengil yong‘oq ohangilik mayin loviya sho‘rva","ნაზი სუპი მერჯმეკით, ორეხის მსუბუქი შტრიხით"],
+["food","Салаты","49 000","🥗","300 г",49000,["Картули","Kartuli","Kartuli","კარტული"],"Свежий салат со спелыми помидорами, хрустящими огурчиками и фирменной ореховой заправкой от шеф-повара","Fresh salad with ripe tomatoes, crispy cucumbers and chef's walnut dressing","Pishgan pomidor, xrustali bodring va shef-oshibning yong‘oqli maxsus slivki bilan yangi salat","ახალი სალათი მწიფე ტომატით, ხრუშტი კიტრით და შეფის ორეხის სოუსით"],
+["food","Салаты","49 000","🥗","300 г",49000,["Сванский салат","Svan salad","Svan salati","სვანური სალათი"],"Спелые томаты с красным луком, сванской солью и кахетинским ароматным маслом","Ripe tomatoes with red onion, Svan salt and Kakhetian oil","Qizil piyoz, svon tuzi va kaxeti bug‘li yog‘i bilan pishgan pomidorlar","მწიფე ტომატები წითელი ხახუნით, სვანური მარილითა და კახური ზეთით"],
+["food","Салаты","49 000","🥗","300 г",49000,["Лада седам","Lada Sedam","Lada Sedam","ლადა სედამი"],"Золотистые жареные баклажаны, бланшированные томаты, сливочный сыр и кисло-сладкий соус","Golden fried eggplant, blanched tomatoes, cream cheese and sweet-sour sauce","Qovurilgan baqlajon, blanshlangan pomidor, slivkali pishloq va achchiq-shirin sous","ოქროსფერი შემწვარი ბადრიჯანი, ბლანშირებული ტომატი, კრემ-ყველი და მჟავე-ტკბილი სოუსი"],
+["food","Салаты","49 000","🥗","300 г",49000,["Оливьешвили","Olivier Stumari","Oliveşvili","ოლივიეშვილი"],"Классический салат с куриным филе и специальной грузинской заправкой","Classic salad with chicken fillet and special Georgian dressing","Tovuq filesi va gruzin maxsus slivkali klassik salat","კლასიკური სალათი ქათმის ფილეთი და ქართული სპეციალური სოუსით"],
+["food","Салаты","49 000","🥗","300 г",49000,["Казьбеги","Kazbegi","Kazbegi","ყაზბეგი"],"Ростбиф, свежий и маринованный огурец, болгарский перец, салат, соус на основе томатов, майонеза и горчицы","Roast beef, fresh and pickled cucumber, bell pepper, tomato-mayo-mustard sauce","Rostbif, yangi va marinadlangan bodring, bolgar qalampiri, pomidor, mayonez va xantal asosidagi sous","როსტბიფი, ახალი და მარინებული კიტრი, ბულგარული წიწაკა, ტომატ-მაიონეზ-სინაპრის სოუსი"],
+["food","Салаты","49 000","🥗","300 г",49000,["Цезаризде с курицей","Caesar with chicken","Tovuqli Sezarizde","ცეზარიზდე ქათმით"],"Сочная курица на гриле, хрустящие листья салата, фирменный соус, гренки из шоти, пармезан и томаты","Juicy grilled chicken, crispy lettuce, house sauce, shoti croutons, parmesan","Grill tovuq, xrustali salat barglari, firma sous, shoti grenekalar, parmezan","შემწვარი ქათამი, ხრუშტი სალათის ფოთოლი, ფირმის სოუსი, შოტის გრენკები, პარმეზანი"],
+["food","Хинкали","49 000 · 4 шт","🥟","4 шт",49000,["Хинкали с говядиной","Beef khinkali","Mol go‘shtli xinkali","ხინკალი ხარშით"],"",""],
+["food","Хинкали","49 000 · 4 шт","🥟","4 шт",49000,["Хинкали с бараниной","Lamb khinkali","Qo‘y go‘shtli xinkali","ხინკალი ბატკნით"],"",""],
+["food","Хинкали","49 000 · 4 шт","🥟","4 шт",49000,["Хинкали с сыром и грибами","Cheese & mushroom khinkali","Pishloq-qo‘ziqorin xinkali","ხინკალი ყველითა და სოკოთი"],"",""],
+["food","Хинкали","49 000 · 4 шт","🥟","4 шт",49000,["Хинкали с курицей и сулугуни","Chicken & suluguni khinkali","Tovuq-suluguni xinkali","ხინკალი ქათმითა და სულგუნით"],"",""],
+["food","Грузинская выпечка","49 000","🧀","350 г",49000,["Хачапури по-мегрельски","Megrelian khachapuri","Megruli xachapuri","მეგრული ხაჭაპური"],"Супер сырный хачапури, сыр внутри и снаружи","Super cheesy khachapuri, cheese inside and out","Juda pishloqli xachapuri — pishloq ichida va tashqarida","სუპერ ყველიანი ხაჭაპური — ყველი შიგნით და გარეთ"],
+["food","Грузинская выпечка","49 000","🧀","350 г",49000,["Хачапури по-аджарски","Adjarian khachapuri","Adjaruli xachapuri","აჭარული ხაჭაპური"],"Лодочка с сыром сулугуни, брынзой, солнечным желтком и сливочным маслом","Boat with suluguni, bryndza, sunny yolk and butter","Suluguni, brynza, quyoshli tuxum sariq va saryog‘ bilan qayiq","ნავი სულგუნით, ბრინზით, მზის გულითა და კარაქით"],
+["food","Грузинская выпечка","49 000","🧀","400 г",49000,["Хабидзгина","Khabidzgina","Xabidzgina","ხაბიზგინა"],"Нежное картофельное пюре, томлёный лук и грузинская смесь сыров","Tender potato mash, stewed onion and Georgian cheese blend","Mayin kartoshka pyuresi, dimlangan piyoz va gruzin pishloq aralashmasi","ნაზი კარტოფილის პიურე, ხახუნი და ქართული ყველების ნაზავი"],
+["food","Грузинская выпечка","49 000","🧀","300 г",49000,["Кутаб","Kutab","Kutab","კუტაბი"],"Кавказская лепёшка с сыром и зеленью, подаём со сметаной","Caucasian flatbread with cheese and herbs, served with sour cream","Pishloq va ko‘katli kavkaz yupqasi, smetana bilan","კავკასიური ხმელი ცომი ყველითა და მწვანილით, ქინძის სოუსით"],
+["food","Грузинская выпечка","49 000","🧀","400 г",49000,["Лобиани","Lobiani","Lobiani","ლობიანი"],"Легенда Грузии — хачапури с начинкой из томлёной фасоли","Georgian legend — flatbread with stewed beans","Gruziya afsonasi — dimlangan loviyali xachapuri","ქართული ლეგენდა — ლობიოს ხაჭაპური"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Оджахури с курицей","Ojakhuri with chicken","Tovuqli ojoxuri","ოჯახური ქათმით"],"Обжаренная курочка с картофелем, томатами, луком и насыщенным ароматом кинзы","Fried chicken with potatoes, tomatoes, onion and cilantro","Kartoshka, pomidor, piyoz va kashnich xushbo‘yi bilan qovurilgan tovuq","შემწვარი ქათამი კარტოფილით, ტომატით, ხახუნითა და ქინძით"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Оджахури с грибами","Ojakhuri with mushrooms","Qo‘ziqorinli ojoxuri","ოჯახური სოკოთი"],"Обжаренный картофель с грибами, луком и ароматными специями","Fried potatoes with mushrooms, onion and spices","Qo‘ziqorin, piyoz va ziravorlar bilan qovurilgan kartoshka","შემწვარი კარტოფილი სოკოთი, ხახუნითა და სპეციებით"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Шкмерули","Shkmeruli","Shkmeruli","შქმერული"],"Бедро цыплёнка в сливочно-чесночном соусе","Chicken thigh in creamy garlic sauce","Qaymoq-sarimsoq sousidagi jo‘ja soni","ქათმის ბედრო ნაღებ-ნიორის სოუსში"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Котлеты домашние","Homemade cutlets","Uy kotletlari","სახლის კოტლეტები"],"Обжаренные котлеты из говядины с нежным картофельным пюре","Fried beef cutlets with mashed potatoes","Mol go‘shtidan qovurilgan kotletlar, mayin kartoshka pyuresi bilan","შემწვარი ძროხის კოტლეტები კარტოფილის პიურეთი"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Чанахи","Chanakhi","Chanaxi","ჩანახი"],"Томлёная говядина с густым наваристым пряным овощным рагу","Stewed beef with rich spicy vegetable ragout","Juda quyuq, ziravorli sabzavot ragu bilan dimlangan mol go‘shti","ხარში ხორცი სქლიან, ნავარისტ, სპეციების ბოსტნეულ რაღუსთან"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Шашлык из курицы","Chicken shashlik","Tovuq kabobi","ქათმის ქაბაბი"],"С обжаренным картофелем, маринованным луком и капустой по-грузински","With fried potatoes, pickled onion and Georgian cabbage","Qovurilgan kartoshka, marinadlangan piyoz va gruzin karami bilan","შემწვარი კარტოფილით, მარინებული ხახუნით და ქართული კომბოსტოთი"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Лобио","Lobio","Lobio","ლობიო"],"Томлёная фасоль с луком и зеленью, подаётся с гурийской капустой","Stewed beans with onion and herbs, served with Gurian cabbage","Piyoz va ko‘katlar bilan dimlangan loviya, guriya kalami bilan","ლობიო ხახუნითა და მწვანილით, გურული კომბოსტოთი"],
+["food","Горячие блюда","49 000","🍖","300 г",49000,["Толма с бараниной","Lamb tolma","Qo‘y go‘shtli tolma","ტოლმა ბატკნით"],"Сочный фарш из баранины с рисом и мятой в виноградных листьях, чесночный соус","Lamb mince with rice and mint in vine leaves, garlic sauce","Guruch va yalpizli qo‘y go‘shtli farsh uzum barglarida, sarimsoq sousi bilan","ტოლმა ბატკნის ფარშით, ბრინჯითა და პიტნით ვაზის ფოთლებში, ნიორის სოუსით"],
+["food","Холодные закуски","49 000","🥙","250 г",49000,["Хумус ассорти","Hummus assortment","Xummus assorti","ჰუმუსი ასორტი"],"Ассорти хумуса с хрустящими гренками","Hummus assortment with crispy croutons","Xrustali grenekalar bilan xummus assorti","ჰუმუსის ასორტი ხრუშტი გრენკებით"],
+["food","Холодные закуски","49 000","🥙","220 г",49000,["Бадриджани с нигвзи","Badrijani with walnut","Yong‘oqli badrijani","ბადრიჯანი ნიგვზით"],"Рулетики из баклажанов с ореховой пастой и грузинскими специями","Eggplant rolls with walnut paste and Georgian spices","Yong‘oq pastasi va gruzin ziravorlari bilan baqlajon ruletikalari","ბადრიჯანის რულეტები ნიგვზის პასტითა და ქართული სპეციებით"],
+["food","Холодные закуски","49 000","🥙","220 г",49000,["Бадриджани с квели","Badrijani with cheese","Pishloqli badrijani","ბადრიჯანი ყველით"],"Рулетики из баклажана с нежной сырной начинкой","Eggplant rolls with tender cheese filling","Mayin pishloqli baqlajon ruletikalari","ბადრიჯანის რულეტები ნაზი ყველით"],
+["food","Холодные закуски","49 000","🥙","300 г",49000,["Зелень-мелень","Fresh herbs & veggies","Ko‘kat-sabzavot assorti","მწვანილ-ბოსტნეული"],"Ассорти из свежих овощей и зелени","Assortment of fresh vegetables and herbs","Yangi sabzavot va ko‘katlar assorti","ახალი ბოსტნეულისა და მწვანილის ასორტი"],
+["food","Холодные закуски","49 000","🥙","300 г",49000,["Аджарский погребок","Adjarian pickles","Adjar turşilari","აჭარული მარინადები"],"Ассорти солений собственного производства","House-made pickled assortment","O‘z ishlab chiqarishimizdan turşi assorti","საკუთარი წარმოების მარინადების ასორტი"],
+["food","Холодные закуски","49 000","🥙","250 г",49000,["Аджхасандали","Adjhasandali","Adjhasandali","აჯხასანდალი"],"Грузинское овощное рагу из сезонных овощей","Georgian vegetable ragout of seasonal vegetables","Mavsumiy sabzavotlardan gruzin sabzavotli ragu","ქართული ბოსტნეული რაღუ სეზონური ბოსტნეულით"],
+["food","Холодные закуски","49 000","🥙","300 г",49000,["Под пенное","Beer snack set","Pivo zakuskasi","ლუდის სნეკები"],"Чесночные гренки, солёный арахис, жареный картофель, курт","Garlic croutons, salted peanuts, fried potatoes, kurt","Sarimsoqli grenekalar, tuzlangan yeryong‘oq, qovurilgan kartoshka, qurt","ნიორის გრენკები, მარინებული თხილი, შემწვარი კარტოფილი, კურტი"],
+["food","Прайм меню","99 000","🥩","150/150 г",99000,["Шашлык из говядины","Beef shashlik","Mol go‘shtli kabob","საქონლის ქაბაბი"],"С картофелем на гриле, маринованным луком и капустой по-грузински","With grilled potatoes, pickled onion and Georgian cabbage","Grill kartoshkasi, marinadlangan piyoz va gruzin karami bilan","გრილის კარტოფილით, მარინებული ხახუნით და ქართული კომბოსტოთი"],
+["food","Прайм меню","99 000","🥩","150/150 г",99000,["Шашлык из баранины","Lamb shashlik","Qo‘y go‘shtli kabob","ბატკნის ქაბაბი"],"С картофелем на гриле, маринованным луком и капустой по-грузински","With grilled potatoes, pickled onion and Georgian cabbage","Grill kartoshkasi, marinadlangan piyoz va gruzin karami bilan","გრილის კარტოფილით, მარინებული ხახუნით და ქართული კომბოსტოთი"],
+["food","Прайм меню","99 000","🥩","150/150 г",99000,["Люля кебаб","Lula kebab","Lyulya-kebab","ლულია-კებაბი"],"Любой люля на выбор: курица, говядина или баранина","Lula of your choice: chicken, beef or lamb","Istalgan lyulya: tovuq, mol yoki qo‘y go‘shti","ნებისმიერი ლულია: ქათამი, ძროხა ან ბატკანი"],
+["food","Для компании","","🍱","1080 г",119000,["Сет хинкали 12","Khinkali set (12 pcs)","Xinkali seti (12 dona)","ხინკალის სეტი (12 ც)"],"Сет из любых 12 хинкали на выбор","Any 12 khinkali of your choice","Istalgan 12 dona xinkalidan set","ნებისმიერი 12 ხინკლის სეტი"],
+["food","Для компании","","🍱","600 г",290000,["Сет мангал","Mangal set","Mangal seti","მანგალის სეტი"],"Ассорти из сочного мяса, приготовленного на открытых углях","Assortment of juicy meats cooked over open coals","Ochiq ko‘mir ustida pishirilgan shirali go‘sht assorti","რბილი ხორცების ასორტი ცოცხალ ნახშირზე"],
+["food","Для компании","","🍱","600 г",210000,["Кебаб сет","Kebab set","Kebab seti","კებაბის სეტი"],"Кебаб из курицы, говядины и баранины","Chicken, beef and lamb kebab","Tovuq, mol va qo‘y go‘shtidan kebab","ქათამი, ძროხა და ბატკნის კებაბი"],
+["food","Для компании","","🍱","750 г",119000,["Гигантский шкмерули","Giant shkmeruli","Gigant shkmeruli","გიგანტური შქმერული"],"Огромная порция шкмерули — хватит на всех!","Giant shkmeruli portion — enough for everyone","Hammaga yetadigan ulkan shkmeruli","გიგანტური შქმერული — ყველას გვეყოფა"],
+["food","Для компании","","🍱","600 г",99000,["Сет холодных закусок","Cold appetizers set","Sovuq zakuskalar seti","ცივი კერძების სეტი"],"Закуски из домашнего погребка: бадриджани с сыром, с грецким орехом и ассорти хумуса","House pickles: badrijani with cheese and walnut, hummus","Uy pogrebog‘idan zakuskalar: pishloqli va yong‘oqli badrijani, xummus","სახლის მარინადები: ბადრიჯანი ყველითა და ნიგვზით, ჰუმუსი"],
+["food","Для компании","","🍱","800 г",89000,["Фруктовая тарелка","Fruit plate","Meva assorti","ხილის ფირფიტა"],"Ассорти сезонных фруктов","Seasonal fruit assortment","Mavsumiy mevalar assorti","სეზონური ხილის ასორტი"],
+["food","Десерты","49 000","🍰","100 г",49000,["Чизкейк","Cheesecake","Chizkeyk","ჩიზქეიქი"],"Классический творожный чизкейк","Classic cheesecake","Klassik tvorogli chizkeyk","კლასიკური ჩიზქეიქი"],
+["food","Десерты","49 000","🍰","150 г",49000,["Медовик","Honey cake","Medovik","მედოვიკი"],"Нежный десерт с натуральным мёдом","Tender dessert with natural honey","Tabiiy asal bilan mayin desert","ნაზი დესერტი ბუნებრივი თაფლით"],
+["food","Десерты","49 000","🍰","130 г",49000,["Морковный","Carrot cake","Sabzali kek","სატაშის კექი"],"Десерт из влажных бисквитных коржей с тёртой морковью, орехами и специями","Moist sponge layers with carrot, nuts and spices","Qirilgan sabzi, yong‘oq va ziravorli nam biskvit qatlamlaridan desert","სატაშის დესერტი ნესტიანი ბისკვიტის ფენებით, თხილითა და სპეციებით"],
+["food","Гарниры","25 000","🍟","200 г",25000,["Овощи гриль","Grilled vegetables","Grill sabzavotlar","გრილის ბოსტნეული"],"",""],
+["food","Гарниры","25 000","🍟","250 г",25000,["Картофель по-деревенски","Country-style potatoes","Qishloq kartoshkasi","სოფლის კარტოფილი"],"",""],
+["food","Гарниры","25 000","🍟","150 г",25000,["Картофель фри","French fries","Fri kartoshkasi","ფრი"],"",""],
+["food","Гарниры","25 000","🍟","200 г",25000,["Рис с овощами","Rice with vegetables","Sabzavotli guruch","ბრინჯი ბოსტნეულით"],"",""],
+["food","Шоти","9 000","🥃","50 мл",9000,["Чача","Chacha","Chacha","ჩაჩა"],"",""],
+["food","Шоти","9 000","🥃","50 мл",9000,["Хреновуха","Khrenovukha","Xrenovuxa","ხრენოვუხა"],"",""],
+["food","Шоти","9 000","🥃","50 мл",9000,["Вишнёвый шот","Cherry shot","Gilos shoti","ალუბლის შოტი"],"",""],
+["food","Шоти","9 000","🥃","50 мл",9000,["Фирменный шот","House shot","Firma shoti","ფირმის შოტი"],"",""],
+["food","Соусы","9 000","🥣","40 г",9000,["Сацебели","Satsibeli","Satsebeli","საცებელი"],"",""],
+["food","Соусы","9 000","🥣","40 г",9000,["Аджика","Adjika","Adzhika","აჯიკა"],"",""],
+["food","Соусы","9 000","🥣","40 г",9000,["Кетчуп","Ketchup","Ketchup","კეჩუპი"],"",""],
+["food","Соусы","9 000","🥣","40 г",9000,["Арахисовый соус","Peanut sauce","Yeryong‘oq sousi","თხილის სოუსი"],"",""],
+["drinks","Фирменные настойки","19 000","🍸","50 мл",19000,["Вишня-Чили","Cherry-Chili","Gilos-chili","ალუბალი-ჩილი"],"",""],
+["drinks","Фирменные настойки","19 000","🍸","50 мл",19000,["Сливочная Лимончелло","Cream Limoncello","Qaymoqli Limonchello","კრემ-ლიმონჩელო"],"",""],
+["drinks","Фирменные настойки","19 000","🍸","50 мл",19000,["Курага","Dried apricot","O‘rik","გამშრობილი გარგარი"],"",""],
+["drinks","Фирменные настойки","19 000","🍸","50 мл",19000,["Барбарис","Barberry","Barbaris","ბარბარისი"],"",""],
+["drinks","Крепкий алкоголь","25 000 / 120 000","🥃","50/500 мл",25000,["Водка «New Uzbekistan»"],"",""],
+["drinks","Крепкий алкоголь","25 000 / 120 000","🥃","50/500 мл",25000,["Водка «Good Goose»"],"",""],
+["drinks","Крепкий алкоголь","25 000 / 120 000","🥃","50/500 мл",25000,["Водка «Старый Самарканд»"],"",""],
+["drinks","Крепкий алкоголь","25 000 / 120 000","🥃","50/500 мл",25000,["Коньяк «Tanbour»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Водка «Absolut»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Водка «Stolichnaya»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Водка «Царская»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Джин «Barrister»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Коньяк «Ararat» 3*"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Ром «Captain Morgan»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Виски «Bells»"],"",""],
+["drinks","Крепкий алкоголь премиум","55 000","🥃","50 мл",55000,["Виски «Johnnie Walker Black Label»"],"",""],
+["drinks","Пиво разливное","19 000","🍺","500 мл",19000,["Пиво «Sarbast»","Sarbast beer","«Sarbast» pivo","სარბასტის ლუდი"],"",""],
+["drinks","Пиво бутылочное","от 25 000","🍺","500 мл",25000,["В ассортименте","Assorted","Turli xil","ასორტი"],"",""],
+["drinks","Вино домашнее","25 000","🍷","150 мл",25000,["Домашнее белое вино","House white wine","Uy oq vinosi","სახლის თეთრი ღვინო"],"",""],
+["drinks","Вино домашнее","25 000","🍷","150 мл",25000,["Домашнее красное вино","House red wine","Uy qizil vinosi","სახლის წითელი ღვინო"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Алазанская долина белое","Alazani Valley white","Oq Alazan vinosi","ალაზნის ველი თეთრი"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Манави белое","Manavi white","Oq Manavi","მანავი თეთრი"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Цинандали белое","Tsinandali white","Oq Tsindali","წინდალი თეთრი"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Саперави","Saperavi","Saperavi","საპერავი"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Мукузани","Mukuzani","Mukuzani","მუკუზანი"],"",""],
+["drinks","Грузинская винная карта","50 000 / 230 000","🍷","150/750 мл",50000,["Киндзмараули","Kindzmarauli","Kinzmaruli","ქინძმარაული"],"",""],
+["drinks","Для веселой компании","99 000","🍻","1500 мл",99000,["Пивная башня Sarbast","Sarbast beer tower","Sarbast pivo minorasi","სარბასტის ლუდის კოშკი"],"",""],
+["drinks","Для веселой компании","99 000","🍻","300 мл",99000,["Сет настоек — 6 шт","Infusion set — 6 pcs","Nastoyka seti — 6 dona","ნასტოიკების სეტი — 6 ც"],"",""],
+["drinks","Для веселой компании","99 000","🍻","500 мл",99000,["Вино домашнее белое"],"",""],
+["drinks","Для веселой компании","99 000","🍻","500 мл",99000,["Вино домашнее красное"],"",""],
+["drinks","Безалкогольные напитки","20 000","🥤","250 мл",20000,["Морс","Fruit mors","Mors","მორსი"],"",""],
+["drinks","Безалкогольные напитки","20 000","🥤","500 мл",20000,["Чорток","Chortok","Chortok","ჩორტოკი"],"",""],
+["drinks","Безалкогольные напитки","20 000","☕","200 мл",20000,["Американо","Americano","Amerikano","ამერიკანო"],"",""],
+["drinks","Безалкогольные напитки","20 000","☕","50 мл",20000,["Эспрессо","Espresso","Espresso","ესპრესო"],"",""],
+["drinks","Безалкогольные напитки","20 000","☕","200 мл",20000,["Капучино","Cappuccino","Kapuchino","კაპუჩინო"],"",""],
+["drinks","Безалкогольные напитки","20 000","🫖","750 мл",20000,["Чай чёрный/зелёный","Black/Green tea","Qora/yashil choy","შავი/მწვანე ჩაი"],"",""],
+["drinks","Безалкогольные напитки","20 000","🥤","250 мл",20000,["Лимонад домашний","House lemonade","Uy limonadi","სახლის ლიმონათი"],"",""],
+["drinks","Чай и кофе","35 000","🫖","750 мл",35000,["Чай Эрл Грей с бергамотом","Earl Grey tea with bergamot","Bergamotli Erl Grey choyi","ერლ გრეი ჩაი ბერგამოტით"],"",""],
+["drinks","Чай и кофе","35 000","🫖","750 мл",35000,["Чай зелёный с жасмином","Green tea with jasmine","Jasminli yashil choy","მწვანე ჩაი ისმინით"],"",""],
+["drinks","Чай и кофе","35 000","🫖","750 мл",35000,["Чай Фруктовый Пальм Бич","Fruity Palm Beach tea","Palm Beach mevali choyi","ფალმ ბიჩის ხილის ჩაი"],"",""],
+["drinks","Чай и кофе","35 000","🫖","750 мл",35000,["Чай Ройбуш","Rooibos tea","Roybush choyi","როიბუშის ჩაი"],"",""],
+["drinks","Чай и кофе","35 000","🫖","750 мл",35000,["Чай Травяной","Herbal tea","O‘t choyi","მცენარეული ჩაი"],"",""],
+["drinks","Чай и кофе","35 000","🥤","1000 мл",35000,["Cola | Fanta","Cola | Fanta","Cola | Fanta","Cola | Fanta"],"",""],
+["drinks","Чай и кофе","35 000","🥤","1000 мл",35000,["Сок в ассортименте","Assorted juice","Turli sharbatalar","სხვადასხვა წვენი"],"",""],
+["drinks","Для дружной компании","55 000","🥤","1000 мл",55000,["Лимонад Тархун","Tarragon lemonade","Tarhun limonadi","ტარხუნას ლიმონათი"],"",""],
+["drinks","Для дружной компании","55 000","🥤","1000 мл",55000,["Лимонад Гранатовый","Pomegranate lemonade","Anor limonadi","ბროწეულის ლიმონათი"],"",""],
+["drinks","Для дружной компании","55 000","🥤","1000 мл",55000,["Лимонад Цитрусовый","Citrus lemonade","Tsitrus limonadi","ციტრუსის ლიმონათი"],"",""],
+["drinks","Для дружной компании","55 000","🥤","1000 мл",55000,["Лимонад Мохито","Mojito lemonade","Moxito limonadi","მოჰიტო ლიმონათი"],"",""],
+["drinks","Для дружной компании","55 000","🥤","1000 мл",55000,["Кувшин морса","Jug of mors","Mors kuvshini","მორსის კანი"],"",""]
+];
+const MENU=M_RAW.map((a,i)=>({id:i+1,cat:a[0],gr:a[1],grb:a[2],icon:a[3],w:a[4],price:a[5],
+  name:{ru:a[6][0],en:a[6][1]||a[6][0],uz:a[6][2]||a[6][0],ka:a[6][3]||a[6][0]},
+  desc:{ru:a[7]||"",en:a[8]||a[7]||"",uz:a[9]||a[7]||"",ka:a[10]||a[7]||""}}));
+
+
+/* ==================== TEMPLATES ==================== */
+const TPL = {
+std:{te:"✨",label:"Стандарт",colors:{bg:"#0d0a12",card:"#1c1428",fire:"#ff5c38",gold:"#e8b64c",gold2:"#f7dc96",cream:"#fdf6e9"},particles:"dust",floats:"🧀,🍷,🍢,🥟,🍇,🎉",orna:"star"},
+ny:{te:"🎄",label:"Новый год",colors:{bg:"#0a1420",card:"#122436",fire:"#e43d5c",gold:"#f2c14e",gold2:"#ffe9b0",cream:"#f4f9ff"},particles:"snow",floats:"🎄,🎁,⛄,🍷,🍾",orna:"diamond"},
+navruz:{te:"🌷",label:"Навруз",colors:{bg:"#0b1710",card:"#132a1c",fire:"#3fae5a",gold:"#e8c95a",gold2:"#f9eab0",cream:"#f3fbf0"},particles:"petals",floats:"🌷,🌱,🍀,🥚,🌼",orna:"cross"},
+mar8:{te:"🌸",label:"8 Марта",colors:{bg:"#190b14",card:"#2a1424",fire:"#ff6f9c",gold:"#f0c46a",gold2:"#ffe3c0",cream:"#fff4f8"},particles:"petals",floats:"🌸,💐,🌷,🎀,🍰",orna:"dots"},
+may9:{te:"🕊️",label:"9 Мая",colors:{bg:"#0d0f16",card:"#1a2030",fire:"#d64545",gold:"#e8c95a",gold2:"#fff0b8",cream:"#f4f2ea"},particles:"fireflies",floats:"🕊️,🌟,💐,⭐",orna:"sun"},
+ramadan:{te:"🌙",label:"Рамадан / айт",colors:{bg:"#0b1020",card:"#141c33",fire:"#3fa7ff",gold:"#f0cf7a",gold2:"#fff0c8",cream:"#f2f6ff"},particles:"fireflies",floats:"🌙,✨,🕌,🕯️",orna:"ring"},
+wed:{te:"💍",label:"Свадьба",colors:{bg:"#160a12",card:"#251425",fire:"#ff5c7a",gold:"#f2d492",gold2:"#fff0d0",cream:"#fff8f4"},particles:"petals",floats:"💍,💐,👰,🍾,🥂",orna:"vine"},
+bday:{te:"🎂",label:"День рождения",colors:{bg:"#120a1e",card:"#1f1432",fire:"#b45cff",gold:"#ffd166",gold2:"#ffe9b0",cream:"#fdf6ff"},particles:"sparks",floats:"🎂,🎈,🎁,🎉,🧁",orna:"star"},
+spring:{te:"🌱",label:"Весна",colors:{bg:"#0b150f",card:"#132419",fire:"#3fae5a",gold:"#e8c95a",gold2:"#f9eab0",cream:"#f2fbf0"},particles:"petals",floats:"🌱,🌷,🦋,🍀,🌸",orna:"cross"},
+summer:{te:"☀️",label:"Лето",colors:{bg:"#0c1016",card:"#141d28",fire:"#ff8c3a",gold:"#ffd23e",gold2:"#ffe9a0",cream:"#fffaf0"},particles:"fireflies",floats:"☀️,🍉,🏖️,🌻,🍹",orna:"wave"},
+autumn:{te:"🍂",label:"Осень",colors:{bg:"#140f0a",card:"#241a10",fire:"#e2703a",gold:"#d9a441",gold2:"#f2d08a",cream:"#faf3e6"},particles:"leaves",floats:"🍂,🍁,🍇,🧣",orna:"wave"},
+winter:{te:"❄️",label:"Зима",colors:{bg:"#0a1018",card:"#131e2c",fire:"#5aa7ff",gold:"#cfe0f5",gold2:"#ffffff",cream:"#f2f7ff"},particles:"snow",floats:"❄️,⛄,🍷,🎄,🧤",orna:"diamond"},
+jan:{te:"❄️",label:"Январь",colors:{bg:"#0a1018",card:"#131e2c",fire:"#5aa7ff",gold:"#cfe0f5",gold2:"#ffffff",cream:"#f2f7ff"},particles:"snow",floats:"❄️,⛄,🍷",orna:"diamond"},
+feb:{te:"💝",label:"Февраль",colors:{bg:"#170b12",card:"#28131e",fire:"#ff5c7a",gold:"#f2c14e",gold2:"#ffe3c0",cream:"#fff4f6"},particles:"petals",floats:"💝,🍫,🌹,💌",orna:"ring"},
+mar:{te:"🌷",label:"Март",colors:{bg:"#0b1710",card:"#132a1c",fire:"#3fae5a",gold:"#e8c95a",gold2:"#f9eab0",cream:"#f3fbf0"},particles:"petals",floats:"🌷,🌱,🌼,🥚",orna:"cross"},
+apr:{te:"🌧️",label:"Апрель",colors:{bg:"#0a1218",card:"#132028",fire:"#4fb8d9",gold:"#e8c95a",gold2:"#dff2ff",cream:"#f0f9ff"},particles:"dust",floats:"🌧️,🍃,🌷,🐦",orna:"zigzag"},
+may:{te:"🌺",label:"Май",colors:{bg:"#0d150c",card:"#182617",fire:"#e2703a",gold:"#f2d060",gold2:"#ffedb0",cream:"#f7fbee"},particles:"petals",floats:"🌺,🌞,🦋,🌿",orna:"sun"},
+jun:{te:"🌻",label:"Июнь",colors:{bg:"#0c1016",card:"#141d28",fire:"#ff9a3a",gold:"#ffd23e",gold2:"#ffe9a0",cream:"#fffaf0"},particles:"fireflies",floats:"🌻,☀️,🍓,🦋",orna:"sun"},
+jul:{te:"🏖️",label:"Июль",colors:{bg:"#0a1116",card:"#12202a",fire:"#ff8c3a",gold:"#ffd76a",gold2:"#ffedb0",cream:"#fff8ec"},particles:"fireflies",floats:"🏖️,☀️,🍉,🍦,🌊",orna:"wave"},
+aug:{te:"🍇",label:"Август",colors:{bg:"#120d18",card:"#1e1528",fire:"#b45cff",gold:"#e8b64c",gold2:"#f7dc96",cream:"#fbf6ff"},particles:"sparks",floats:"🍇,🌻,🍑,🦗",orna:"star"},
+sep:{te:"🍇",label:"Сентябрь",colors:{bg:"#140f0a",card:"#241a10",fire:"#e2703a",gold:"#d9a441",gold2:"#f2d08a",cream:"#faf3e6"},particles:"leaves",floats:"🍇,🍂,🎒,🌾",orna:"vine"},
+oct:{te:"🎃",label:"Октябрь",colors:{bg:"#150e08",card:"#251a0e",fire:"#ff7a2f",gold:"#e8a54c",gold2:"#ffd9a0",cream:"#faf0e2"},particles:"leaves",floats:"🎃,🍂,🍁,🕯️",orna:"meander"},
+nov:{te:"🍁",label:"Ноябрь",colors:{bg:"#120f0c",card:"#1f1a14",fire:"#c9503a",gold:"#c98f3d",gold2:"#e8c98a",cream:"#f5eee4"},particles:"leaves",floats:"🍁,☕,🍂,🧣",orna:"diamond"},
+dec:{te:"🎄",label:"Декабрь",colors:{bg:"#0a1420",card:"#122436",fire:"#e43d5c",gold:"#f2c14e",gold2:"#ffe9b0",cream:"#f4f9ff"},particles:"snow",floats:"🎄,🎁,❄️,⭐",orna:"diamond"}
+};
+const HOLIDAYS=["ny","navruz","mar8","may9","ramadan","wed","bday"],SEASONS=["spring","summer","autumn","winter"],MONTHS=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+
+/* ==================== ORNAMENT PATTERNS ==================== */
+const ORN={
+star:{label:"Звезда",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 4l7 17 17 7-17 7-7 17-7-17-17-7 17-7z' fill='%23e8b64c'/%3E%3C/svg%3E\")"},
+diamond:{label:"Ромбы",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 6l22 22-22 22L6 28z' fill='none' stroke='%23e8b64c' stroke-width='1.5'/%3E%3C/svg%3E\")"},
+cross:{label:"Крестики",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 12v32M12 28h32' stroke='%23e8b64c' stroke-width='2.5'/%3E%3Ccircle cx='28' cy='28' r='3' fill='%23e8b64c'/%3E%3C/svg%3E\")"},
+wave:{label:"Волны",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M0 28q7-10 14 0t14 0t14 0t14 0' fill='none' stroke='%23e8b64c' stroke-width='1.5'/%3E%3C/svg%3E\")"},
+dots:{label:"Точки",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Ccircle cx='14' cy='14' r='2.2' fill='%23e8b64c'/%3E%3Ccircle cx='42' cy='42' r='2.2' fill='%23e8b64c'/%3E%3C/svg%3E\")"},
+sun:{label:"Солнце",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Ccircle cx='28' cy='28' r='6' fill='none' stroke='%23e8b64c' stroke-width='1.5'/%3E%3Ccircle cx='28' cy='28' r='1.8' fill='%23e8b64c'/%3E%3Cpath d='M28 6v8M28 42v8M6 28h8M42 28h8' stroke='%23e8b64c' stroke-width='1.5'/%3E%3C/svg%3E\")"},
+meander:{label:"Меандр",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M0 14h42v14H14v14h42' fill='none' stroke='%23e8b64c' stroke-width='2'/%3E%3C/svg%3E\")"},
+vine:{label:"Лоза",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 4v48M28 14q11-5 15 4M28 14q-11-5-15 4M28 32q11-5 15 4M28 32q-11-5-15 4' fill='none' stroke='%23e8b64c' stroke-width='1.6'/%3E%3Ccircle cx='43' cy='19' r='2.4' fill='%23e8b64c'/%3E%3Ccircle cx='13' cy='19' r='2.4' fill='%23e8b64c'/%3E%3Ccircle cx='43' cy='37' r='2.4' fill='%23e8b64c'/%3E%3Ccircle cx='13' cy='37' r='2.4' fill='%23e8b64c'/%3E%3C/svg%3E\")"},
+ring:{label:"Кольца",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Ccircle cx='28' cy='28' r='13' fill='none' stroke='%23e8b64c' stroke-width='1.5'/%3E%3Ccircle cx='28' cy='28' r='5' fill='none' stroke='%23e8b64c' stroke-width='1.5'/%3E%3C/svg%3E\")"},
+zigzag:{label:"Зигзаг",uri:"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M0 42l14-26 14 26 14-26 14 26' fill='none' stroke='%23e8b64c' stroke-width='1.7'/%3E%3C/svg%3E\")"}
+};
+function applyOrn(){const o=ORN[S.orna]||ORN.star;document.querySelector(".orna").style.backgroundImage=o.uri;}
+function buildOrn(){const w=$("ornPick");if(!w)return;w.innerHTML="";
+  Object.keys(ORN).forEach(k=>{const b=document.createElement("button");
+    b.style.backgroundImage=ORN[k].uri;b.style.backgroundSize="28px 28px";
+    b.title=ORN[k].label;if(S.orna===k)b.classList.add("on");
+    b.onclick=()=>{S.orna=k;buildOrn();};w.appendChild(b);});}
+
+/* ==================== STATE ==================== */
+const DEF={ver:3,lang:"ru",colors:{bg:"#0d0a12",card:"#1c1428",fire:"#ff5c38",gold:"#e8b64c",gold2:"#f7dc96",cream:"#fdf6e9"},blobSpeed:26,ornaOp:5,orna:"star",blobs:true,ornaOn:true,particles:"dust",floats:"🧀,🍷,🍢,🥟,🍇,🎉",marquee:"",musicUrl:"",vol:40,pass:"stumari",phone:"+998945403505",address:"",gUrl:"https://www.google.com/maps/search/?api=1&query=Stumari+Samarkand",yUrl:"https://yandex.uz/maps/?text=Stumari%20Samarkand",txO:{},menu:JSON.parse(JSON.stringify(MENU))};
+let S;try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem("stumari_v3")||"{}"));}catch(e){S=Object.assign({},DEF);}
+S.colors=Object.assign({},DEF.colors,S.colors);S.txO=S.txO||{};S.menu=(S.menu&&S.menu.length)?S.menu:JSON.parse(JSON.stringify(MENU));
+const save=()=>{try{localStorage.setItem("stumari_v3",JSON.stringify(S));}catch(e){}};
+const t=k=>{const o=S.txO[S.lang]&&S.txO[S.lang][k];return o||I18N[S.lang][k]||I18N.ru[k]||k;};
+const fmt=n=>n.toLocaleString("ru-RU")+" "+t("cur");
+const $=id=>document.getElementById(id);
+
+/* ==================== APPLY ==================== */
+function applyAll(){
+  const r=document.documentElement.style;
+  r.setProperty("--bg",S.colors.bg);r.setProperty("--card",S.colors.card);r.setProperty("--fire",S.colors.fire);
+  r.setProperty("--gold",S.colors.gold);r.setProperty("--gold2",S.colors.gold2);r.setProperty("--cream",S.colors.cream);
+  r.setProperty("--blobSpeed",S.blobSpeed+"s");r.setProperty("--ornaOp",S.ornaOp/100);
+  document.querySelectorAll(".blob").forEach(b=>b.style.display=S.blobs?"":"none");
+  document.querySelector(".orna").style.display=S.ornaOn?"":"none";
+  applyOrn();
+  document.querySelectorAll(".langs button").forEach(b=>b.classList.toggle("on",b.dataset.lang===S.lang));
+  document.querySelectorAll("[data-i]").forEach(el=>el.textContent=t(el.dataset.i));
+  document.querySelectorAll("[data-i-ph]").forEach(el=>el.placeholder=t(el.dataset.iPh));
+  $("search").value="";
+  const mq=t("marquee");
+  $("mq").innerHTML=("<span>"+mq+"</span>").repeat(6);
+  buildFloats();renderMenu();
+  document.querySelectorAll('a[href^="tel:"]').forEach(a=>a.href="tel:"+S.phone);
+  $("gBtn").href=S.gUrl||"#";$("yBtn").href=S.yUrl||"#";
+  const ad=document.querySelector("[data-i='address']");if(S.address)ad.textContent=S.address;
+  updG();buildVac();
+}
+function buildFloats(){
+  const h=$("floaters");h.innerHTML="";
+  const em=(S.floats||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const pos=[[8,16],[82,12],[12,72],[85,70],[45,8],[70,40],[25,38]];
+  em.slice(0,7).forEach((e,i)=>{const d=document.createElement("div");d.className="floaty";d.textContent=e;
+    d.style.left=pos[i%pos.length][0]+"%";d.style.top=pos[i%pos.length][1]+"%";d.style.animationDelay=(i*.7)+"s";h.appendChild(d);});
+}
+
+
+/* --- group name translations (4 languages) --- */
+const GR_TR={
+"Супы":{en:"Soups",uz:"Sho‘rvlar",ka:"სუპები"},
+"Салаты":{en:"Salads",uz:"Salatlar",ka:"სალათები"},
+"Хинкали":{en:"Khinkali",uz:"Xinkali",ka:"ხინკალი"},
+"Грузинская выпечка":{en:"Georgian bakery",uz:"Gurjin nonlari",ka:"ქართული ცომეული"},
+"Горячие блюда":{en:"Hot dishes",uz:"Issiq taomlar",ka:"ცხელი კერძები"},
+"Холодные закуски":{en:"Cold appetizers",uz:"Sovuq zakuskalar",ka:"ცივი კერძები"},
+"Прайм меню":{en:"Prime menu",uz:"Prays menyu",ka:"პრაიმ მენიუ"},
+"Для компании":{en:"For company",uz:"Kompaniya uchun",ka:"კომპანიისთვის"},
+"Десерты":{en:"Desserts",uz:"Desertlar",ka:"დესერტები"},
+"Гарниры":{en:"Sides",uz:"Garnirlar",ka:"გარნირები"},
+"Шоти":{en:"Shots",uz:"Shotlar",ka:"შოტები"},
+"Соусы":{en:"Sauces",uz:"Souslar",ka:"სოუსები"},
+"Фирменные настойки":{en:"House infusions",uz:"Firma nastoykaları",ka:"ფირმის ნასტოიკები"},
+"Крепкий алкоголь":{en:"Spirits",uz:"Kuchli alkogol",ka:"ძლიერი ალკოჰოლი"},
+"Крепкий алкоголь премиум":{en:"Premium spirits",uz:"Premium alkogol",ka:"პრემიუმ ალკოჰოლი"},
+"Пиво разливное":{en:"Draft beer",uz:"Quyuq pivo",ka:"ჩამოსასხმელი ლუდი"},
+"Пиво бутылочное":{en:"Bottled beer",uz:"Butulkali pivo",ka:"ბოთლის ლუდი"},
+"Вино домашнее":{en:"House wine",uz:"Uy vinosi",ka:"სახლის ღვინო"},
+"Грузинская винная карта":{en:"Georgian wine list",uz:"Gurjin vino kartasi",ka:"ქართული ღვინის კარტა"},
+"Для веселой компании":{en:"Party sets",uz:"Zavqli kompaniya uchun",ka:"სახალისო კომპანიისთვის"},
+"Безалкогольные напитки":{en:"Soft drinks",uz:"Alkogolsiz ichimliklar",ka:"უალკოჰოლო სასმელები"},
+"Чай и кофе":{en:"Tea & coffee",uz:"Choy va qahva",ka:"ჩაი და ყავა"},
+"Для дружной компании":{en:"Company pitchers",uz:"Do‘stona kompaniya uchun",ka:"მეგობრული კომპანიისთვის"}};
+const grName=g=>(S.txO[S.lang]&&S.txO[S.lang]["gr:"+g])||(S.lang==="ru"?g:(GR_TR[g]&&(GR_TR[g][S.lang]||GR_TR[g].en))||g);
+const PALETTE=[["#ff5c38","#b32e12"],["#e8b64c","#7d5a1a"],["#27b45e","#0b5c30"],["#3fa7ff","#173f8a"],["#b45cff","#4d1e8a"],["#ff6f9c","#8f2050"],["#ff8c3a","#8a4a0e"],["#4fb8d9","#155a75"]];
+Object.assign(I18N.ru,{allCat:"Все",again:"Отправить ещё одну",todayW:"Сегодня",tomorrowW:"Завтра",gPers:"гостей"});Object.assign(I18N.en,{allCat:"All",again:"Send another",todayW:"Today",tomorrowW:"Tomorrow",gPers:"guests"});
+Object.assign(I18N.uz,{allCat:"Barchasi",again:"Yana birini yuborish",todayW:"Bugun",tomorrowW:"Ertaaga",gPers:"mehmon"});Object.assign(I18N.ka,{allCat:"ყველა",again:"კიდევ ერთის გაგზავნა",todayW:"დღეს",tomorrowW:"ხვალ",gPers:"სტუმარი"});
+
+/* ==================== MENU RENDER ==================== */
+let curTab="food",curGroup=null;
+const menuList=$("menuList");
+function renderMenu(){
+  const q=($("search").value||"").toLowerCase();
+  const frag=document.createDocumentFragment();
+  const items=S.menu.filter(m=>m.cat===curTab);
+  let groups=[...new Set(items.map(m=>m.gr))];
+  if(curGroup)groups=groups.filter(g=>g===curGroup);
+  buildTiles();
+  let any=false;
+  groups.forEach(g=>{
+    const gi=items.filter(m=>m.gr===g&&((m.name[S.lang]||m.name.ru).toLowerCase().includes(q)||(m.desc[S.lang]||m.desc.ru).toLowerCase().includes(q)));
+    if(!gi.length)return;any=true;
+    const h=document.createElement("div");h.className="grhead";
+    const hs=document.createElement("span");hs.textContent=grName(g);h.appendChild(hs);
+    const gb=gi[0].grb;if(gb){const b=document.createElement("span");b.className="grb";b.textContent=gb;h.appendChild(b);}
+    frag.appendChild(h);
+    gi.forEach(m=>{
+      const c=document.createElement("div");c.className="card tilt";
+      const dish=document.createElement("div");dish.className="dish";
+      const ic=document.createElement("span");ic.className="ic";ic.textContent=m.icon||"🍽️";
+      const mid=document.createElement("div");
+      const nm=document.createElement("div");nm.className="nm";nm.textContent=m.name[S.lang]||m.name.ru;
+      if(m.w){const wt=document.createElement("span");wt.className="wt";wt.textContent=m.w;nm.appendChild(wt);}
+      const ds=document.createElement("div");ds.className="ds";ds.textContent=m.desc[S.lang]||m.desc.ru;
+      const pr=document.createElement("span");pr.className="pr";pr.textContent=fmt(m.price);
+      const pcol=document.createElement("div");pcol.className="prcol";
+      const ab=document.createElement("button");ab.className="addbtn";ab.type="button";ab.textContent=t("addBtn");ab.title=t("addBtnTitle");
+      ab.onclick=(ev)=>{ev.stopPropagation();addToCart(m.id);};
+      pcol.appendChild(pr);pcol.appendChild(ab);
+      mid.appendChild(nm);if(ds.textContent)mid.appendChild(ds);dish.appendChild(ic);dish.appendChild(mid);dish.appendChild(pcol);c.appendChild(dish);
+      if(finePtr){c.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect();
+        const mx=e.clientX-r.left,my=e.clientY-r.top;
+        tiltRaf(c,mx/r.width*8-4,4-my/r.height*8,mx+"px",my+"px");});
+        c.addEventListener("pointerleave",()=>{c.style.transform="";});}
+      frag.appendChild(c);
+    });
+  });
+  menuList.innerHTML="";
+  if(!any){const e=document.createElement("div");e.className="empty";e.textContent=t("searchPh")+" 🍽️";menuList.appendChild(e);}
+  else menuList.appendChild(frag);
+}
+
+function buildTiles(){
+  const w=$("catTiles");if(!w)return;w.innerHTML="";
+  const items=S.menu.filter(m=>m.cat===curTab);
+  const groups=[...new Set(items.map(m=>m.gr))];
+  const mk=(g,icon)=>{
+    const b=document.createElement("button");b.className="catile"+((curGroup===g)?" on":"");
+    const pal=PALETTE[((g==="*"?0:groups.indexOf(g)+1))%PALETTE.length];
+    b.style.background="linear-gradient(135deg,"+pal[0]+","+pal[1]+")";
+    const cnt=g==="*"?items.length:items.filter(m=>m.gr===g).length;
+    b.innerHTML="<span class='ce'>"+icon+"</span><span class='cn'></span><span class='cc'>"+cnt+"</span>";
+    b.querySelector(".cn").textContent=g==="*"?t("allCat"):grName(g);
+    b.onclick=()=>{curGroup=(curGroup===g)?null:g;renderMenu();};
+    w.appendChild(b);};
+  mk("*","✨");groups.forEach(g=>mk(g,(items.find(m=>m.gr===g)||{}).icon||"🍽️"));
+}
+
+const finePtr=matchMedia("(pointer:fine)").matches;
+const tiltQ=new Map();
+function tiltRaf(el,ry,rx,mx,my){if(tiltQ.has(el))return;tiltQ.set(el,[ry,rx,mx,my]);
+  requestAnimationFrame(()=>{const q=tiltQ.get(el);tiltQ.delete(el);
+    if(q[2]!==undefined){el.style.setProperty("--mx",q[2]);el.style.setProperty("--my",q[3]);}
+    el.style.transform="rotateY("+q[0]+"deg) rotateX("+q[1]+"deg)";});}
+$("tabFood").onclick=()=>{curTab="food";curGroup=null;$("tabFood").classList.add("on");$("tabDrinks").classList.remove("on");renderMenu();};
+$("tabDrinks").onclick=()=>{curTab="drinks";curGroup=null;$("tabDrinks").classList.add("on");$("tabFood").classList.remove("on");renderMenu();};
+let sT;$("search").addEventListener("input",()=>{clearTimeout(sT);sT=setTimeout(renderMenu,120);});
+document.querySelectorAll(".langs button").forEach(b=>b.onclick=()=>{S.lang=b.dataset.lang;save();applyAll();});
+
+/* ==================== PARTICLES ==================== */
+const cv=$("dust"),cx=cv.getContext("2d");
+const DPR=Math.min(devicePixelRatio||1,1.25);
+let P=[],adminOpen=false;
+function rs(){cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";cx.setTransform(DPR,0,0,DPR,0,0);}
+rs();addEventListener("resize",rs,{passive:true});
+const AREA=Math.min(1,innerWidth*innerHeight/900000);
+const PCOL={dust:"rgba(232,182,76,",snow:"rgba(240,248,255,",leaves:"rgba(220,120,50,",petals:"rgba(255,150,180,",fireflies:"rgba(200,255,120,",sparks:"rgba(255,160,70,"};
+const BASE={dust:28,snow:42,leaves:28,petals:32,fireflies:22,sparks:26};
+function mk(w,h,m){return{x:Math.random()*w,y:Math.random()*h,
+  r:m==="snow"?1+Math.random()*2.5:m==="fireflies"?.8+Math.random()*1.2:.8+Math.random()*1.8,
+  vx:(Math.random()-.5)*(m==="leaves"?.8:m==="fireflies"?.4:.25),
+  vy:m==="sparks"?-(.5+Math.random()*.9):m==="snow"?.4+Math.random()*.7:m==="leaves"?.6+Math.random()*.5:m==="petals"?.5+Math.random()*.4:m==="fireflies"?(Math.random()-.5)*.3:.15+Math.random()*.25,
+  a:.25+Math.random()*.55,ph:Math.random()*6.28};}
+function loop(){
+  requestAnimationFrame(loop);
+  if(document.hidden||adminOpen){if(P.length){cx.clearRect(0,0,innerWidth,innerHeight);P=[];}return;}
+  const m=S.particles,w=innerWidth,h=innerHeight;
+  cx.clearRect(0,0,w,h);
+  if(m==="none"){P=[];return;}
+  const N=Math.round((BASE[m]||45)*AREA);
+  while(P.length<N)P.push(mk(w,h,m));
+  if(P.length>N)P.length=N;
+  const col=PCOL[m]||PCOL.dust,leaves=m==="leaves";
+  for(let i=0;i<P.length;i++){const p=P[i];p.ph+=.02;
+    p.x+=p.vx+(leaves||m==="petals"||m==="sparks"?Math.sin(p.ph)*.6:0);p.y+=p.vy;
+    if(p.y>h+12){p.y=-12;p.x=Math.random()*w;}
+    if(p.y<-14){p.y=h+10;p.x=Math.random()*w;}
+    if(p.x>w+12)p.x=-12;if(p.x<-12)p.x=w+12;}
+  for(let b=0;b<4;b++){const a0=.25+b*.2;cx.beginPath();cx.fillStyle=col+a0+")";
+    for(let i=0;i<P.length;i++){const p=P[i];
+      const a=m==="fireflies"?.4+Math.abs(Math.sin(p.ph*2))*.6:p.a;
+      const bk=Math.min(3,(a*4)|0);if(bk!==b)continue;
+      if(leaves)cx.ellipse(p.x,p.y,p.r*2.2,p.r,p.ph,0,6.283);
+      else cx.moveTo(p.x+p.r,p.y),cx.arc(p.x,p.y,p.r,0,6.283);}
+    cx.fill();}
+}
+requestAnimationFrame(loop);
+
+/* ==================== MUSIC ==================== */
+const musEl=$("musEl");musEl.loop=false;
+const IDB={db:null,
+  open(){return new Promise((res,rej)=>{try{const r=indexedDB.open("stumari",1);
+    r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains("tracks"))r.result.createObjectStore("tracks",{keyPath:"name"});};
+    r.onsuccess=()=>{IDB.db=r.result;res();};r.onerror=()=>rej(r.error);}catch(e){rej(e);}});},
+  put(tr){return IDB.tx("readwrite",s=>s.put(tr));},
+  del(n){return IDB.tx("readwrite",s=>s.delete(n));},
+  all(){return new Promise((res,rej)=>{if(!IDB.db)return res([]);
+    const rq=IDB.db.transaction("tracks","readonly").objectStore("tracks").getAll();
+    rq.onsuccess=()=>res(rq.result||[]);rq.onerror=()=>rej(rq.error);});},
+  tx(mode,fn){return new Promise((res,rej)=>{if(!IDB.db)return res();
+    const t=IDB.db.transaction("tracks",mode);fn(t.objectStore("tracks"));t.oncomplete=res;t.onerror=()=>rej(t.error);});}};
+let tracks=[],tIdx=0,playing=false,genTimer=null,ac=null;
+function trackURL(tr){if(!tr._u)tr._u=URL.createObjectURL(tr.blob||(tr.blob=dataURLtoBlob(tr.data)));return tr._u;}
+function dataURLtoBlob(d){const[p,body]=d.split(","),mime=(p.match(/:(.*?);/)||[])[1]||"audio/mpeg";
+  const bin=atob(body),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return new Blob([arr],{type:mime});}
+async function loadTracks(){try{await IDB.open();const all=await IDB.all();
+  tracks=all.map(x=>({name:x.name,data:x.data,url:null}));}catch(e){tracks=[];}renderTracks();}
+function renderTracks(){const w=$("f_trackList");if(!w)return;w.innerHTML="";
+  tracks.forEach((tr,i)=>{const d=document.createElement("div");d.className="trk";
+    d.innerHTML="<span>🎵</span><span class='tn'></span>";
+    d.querySelector(".tn").textContent=tr.name;
+    const b=document.createElement("button");b.textContent="🗑";b.title="Удалить";
+    b.onclick=async()=>{try{await IDB.del(tr.name);}catch(e){}tracks.splice(i,1);
+      if(tIdx>=tracks.length)tIdx=0;renderTracks();};
+    d.appendChild(b);w.appendChild(d);});
+  $("musicBtn").title=tracks.length?("♪ "+tracks.length+" трек(ов)"):"Music";}
+function stopGen(){clearInterval(genTimer);genTimer=null;}
+function startGen(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+  const master=ac.createGain();master.gain.value=(S.vol/100)*.5;master.connect(ac.destination);
+  const dr=ac.createOscillator(),dg=ac.createGain();dr.type="sine";dr.frequency.value=55;dg.gain.value=.12;dr.connect(dg);dg.connect(master);dr.start();
+  const SCALE=[0,3,5,7,10];
+  genTimer=setInterval(()=>{if(!playing)return;
+    const f=110*Math.pow(2,SCALE[(Math.random()*5)|0]/12*2);
+    const o=ac.createOscillator(),g=ac.createGain();o.type="triangle";o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,ac.currentTime);g.gain.exponentialRampToValueAtTime(.22,ac.currentTime+.03);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+1.1);
+    o.connect(g);g.connect(master);o.start();o.stop(ac.currentTime+1.2);},650);}
+function playCurrent(){if(!tracks.length)return;musEl.loop=false;
+  const tr=tracks[tIdx%tracks.length];
+  try{musEl.src=tr.url||trackURL(tr);}catch(e){return;}
+  musEl.volume=S.vol/100;musEl.play().catch(()=>{});
+  $("musicBtn").title="♪ "+tr.name;}
+musEl.addEventListener("ended",()=>{if(tracks.length&&playing){tIdx=(tIdx+1)%tracks.length;playCurrent();}});
+$("musicBtn").onclick=function(){
+  playing=!playing;this.classList.toggle("playing",playing);
+  if(tracks.length){if(playing){if(!musEl.src)playCurrent();else musEl.play().catch(()=>{});}else musEl.pause();stopGen();}
+  else if(S.musicUrl){musEl.loop=true;musEl.src=S.musicUrl;musEl.volume=S.vol/100;if(playing)musEl.play().catch(()=>{});else musEl.pause();}
+  else{if(playing)startGen();else stopGen();}};
+$("f_files").addEventListener("change",e=>{
+  [...e.target.files].forEach(f=>{const r=new FileReader();
+    r.onload=async()=>{const tr={name:f.name,data:r.result,url:null};
+      tracks.push(tr);
+      if(r.result.length<25*1024*1024){try{await IDB.put({name:tr.name,data:tr.data});}catch(x){}}
+      renderTracks();};
+    r.readAsDataURL(f);});
+  e.target.value="";});
+
+/* ==================== FORMS: booking / vacancies / feedback ==================== */
+const REQ={load(){try{return JSON.parse(localStorage.getItem("stumari_req")||'{"b":[],"v":[],"f":[]}');}catch(e){return{b:[],v:[],f:[]};}},
+  save(d){try{localStorage.setItem("stumari_req",JSON.stringify(d));}catch(e){}}};
+let REQD=REQ.load();REQD.o=REQD.o||[];
+const VACPOS=[{ru:"Официант",en:"Waiter",uz:"Ofitsiant",ka:"მიმტანი"},
+{ru:"Повар",en:"Cook",uz:"Oshpaz",ka:"მზარეული"},
+{ru:"Администратор",en:"Administrator",uz:"Administrator",ka:"ადმინისტრატორი"},
+{ru:"Курьер",en:"Courier",uz:"Kuryer",ka:"კურიერი"}];
+const vacName=p=>{const o=VACPOS.find(x=>x.ru===p)||p;return S.lang==="ru"?o.ru:(o[S.lang]||o.en);};
+function buildVac(){const vp=$("vPos");if(!vp)return;vp.innerHTML="";
+  VACPOS.forEach(p=>{const o=document.createElement("option");o.textContent=vacName(p);o.value=p.ru;vp.appendChild(o);});
+  const vl=$("vacList");if(vl)vl.innerHTML=VACPOS.map(p=>"<span>"+vacName(p)+"</span>").join("");}
+let bGuestsN=2;
+const ts=$("bTime");
+for(let h=11;h<=22;h++)["00","30"].forEach(m=>{if(h===22&&m==="30")return;
+  const o=document.createElement("option");o.textContent=h+":"+m;ts.appendChild(o);});
+ts.value="19:00";
+$("bDate").min=new Date().toISOString().slice(0,10);
+const GPERS={ru:n=>n%10===1&&n%100!==11?"гость":(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?"гостя":"гостей"),
+en:n=>n===1?"guest":"guests",uz:n=>n===1?"mehmon":"mehmonlar",ka:()=>"სტუმარი"};
+const GFACE=n=>n===1?"🧍":n===2?"👫":n<=4?"👨‍👩‍👧‍👦":n<=8?"👥":n<=12?"🎉":"🥂";
+function updG(){$("gNum").textContent=bGuestsN;
+  const g=$("gPers");if(g)g.textContent=GPERS[S.lang]?GPERS[S.lang](bGuestsN):bGuestsN;
+  const f=$("gFace");if(f){f.textContent=GFACE(bGuestsN);f.style.transform="scale("+(1+Math.min(bGuestsN,30)/60)+")";}
+  const r=$("gRange");if(r){r.value=bGuestsN;
+    const p=(bGuestsN-1)/29*100;
+    r.style.background="linear-gradient(90deg,var(--gold) "+p+"%,rgba(232,182,76,.18) "+p+"%)";}}
+$("gRange").addEventListener("input",e=>{bGuestsN=Math.max(1,Math.min(30,+e.target.value||1));updG();});
+buildVac();
+[$("bPhone"),$("vPhone")].forEach(ph=>ph.addEventListener("input",()=>{ph.value=ph.value.replace(/[^\d+\s()-]/g,"");}));
+function need(el){const ok=el.value.trim().length>0;el.classList.toggle("err-b",!ok);return ok;}
+$("bookForm").addEventListener("submit",e=>{e.preventDefault();
+  const ok=[need($("bName")),need($("bPhone"))].every(Boolean);
+  if(!ok)return;
+  REQD.b.push({n:$("bName").value.trim(),p:$("bPhone").value.trim(),d:$("bDate").value||new Date().toISOString().slice(0,10),t:$("bTime").value,g:bGuestsN,ts:Date.now()});
+  REQ.save(REQD);$("bookForm").style.display="none";$("bookOk").classList.add("on");buildReqs();});
+$("vacForm").addEventListener("submit",e=>{e.preventDefault();
+  const ok=[need($("vName")),need($("vPhone"))].every(Boolean);
+  if(!ok)return;
+  REQD.v.push({n:$("vName").value.trim(),p:$("vPhone").value.trim(),pos:$("vPos").value,a:$("vAbout").value.trim(),ts:Date.now()});
+  REQ.save(REQD);$("vacForm").style.display="none";$("vacOk").classList.add("on");buildReqs();});
+$("fbBtn").onclick=()=>{
+  if(!need($("fbText")))return;
+  REQD.f.push({m:$("fbText").value.trim(),ts:Date.now()});
+  REQ.save(REQD);$("fbText").value="";$("fbOk").classList.add("on");buildReqs();};
+$("bookAgain").onclick=()=>{$("bookOk").classList.remove("on");$("bookForm").reset();$("bookForm").style.display="";};
+$("vacAgain").onclick=()=>{$("vacOk").classList.remove("on");$("vacForm").reset();$("vacForm").style.display="";};
+$("fbAgain").onclick=()=>{$("fbOk").classList.remove("on");$("fbText").value="";};
+
+
+/* ==================== ONLINE ORDER / CART ==================== */
+Object.assign(I18N.ru,{cartT:"Ваш заказ",cartEmpty:"Корзина пуста — добавьте блюда из меню 🍽️",addBtn:"＋",addBtnTitle:"В корзину",added:"✓ В корзине",pickup:"Самовывоз",delivery:"Доставка",feeL:"Доставка такси",namePh:"Ваше имя",phonePh:"Телефон",addrPh:"Адрес доставки",payCash:"Наличные",payCard:"Карта при получении",payPayme:"PayMe",commentPh:"Комментарий (необязательно)",orderBtn:"Оформить заказ",totalL:"Итого",orderOk:"Заказ принят!",orderOkT:"Заказ уже в админке сайта: 5 тапов по логотипу → 🛒 Онлайн-заказы. Кнопка ниже дублирует его менеджеру в WhatsApp.",orderAgain:"Готово",waBtn:"📲 Продублировать в WhatsApp",orderHint:"Заказ мгновенно попадает в админку сайта (⚙ → 🛒 Онлайн-заказы). Кнопка WhatsApp — чтобы менеджер увидел заказ с любого устройства.",fillOrder:"Заполните имя и телефон"});
+Object.assign(I18N.en,{cartT:"Your order",cartEmpty:"Cart is empty — add dishes from the menu 🍽️",addBtn:"＋",addBtnTitle:"Add to cart",added:"✓ Added",pickup:"Pickup",delivery:"Delivery",feeL:"Taxi delivery",namePh:"Your name",phonePh:"Phone",addrPh:"Delivery address",payCash:"Cash",payCard:"Card on receipt",payPayme:"PayMe",commentPh:"Comment (optional)",orderBtn:"Place order",totalL:"Total",orderOk:"Order accepted!",orderOkT:"The order is already in the site admin: 5 taps on the logo → 🛒 Online orders. The button below duplicates it to the manager's WhatsApp.",orderAgain:"Done",waBtn:"📲 Duplicate to WhatsApp",orderHint:"The order instantly appears in the site admin (⚙ → 🛒). The WhatsApp button lets the manager see it from any device.",fillOrder:"Please fill in name and phone"});
+Object.assign(I18N.uz,{cartT:"Buyurtmangiz",cartEmpty:"Savat bo‘sh — menyudan taom qo‘shing 🍽️",addBtn:"＋",addBtnTitle:"Savatga",added:"✓ Qo‘shildi",pickup:"O‘zi olib ketish",delivery:"Yetkazib berish",feeL:"Taksi yetkazib berish",namePh:"Ismingiz",phonePh:"Telefon",addrPh:"Yetkazib berish manzili",payCash:"Naqd",payCard:"Qabul qilganda karta",payPayme:"PayMe",commentPh:"Izoh (ixtiyoriy)",orderBtn:"Buyurtma berish",totalL:"Jami",orderOk:"Buyurtma qabul qilindi!",orderOkT:"Buyurtma allaqachon sayt adminida: logotipga 5 marta bosing → 🛒 Onlayn-buyurtmalar. Quyidagi tugma uni menejerning WhatsApp'iga nusxalaydi.",orderAgain:"Tayyor",waBtn:"📲 WhatsApp'ga nusxalash",orderHint:"Buyurtma darhol sayt adminiga tushadi (⚙ → 🛒). WhatsApp tugmasi — menejer uni har qanday qurilmadan ko‘rishi uchun.",fillOrder:"Ism va telefonni kiriting"});
+Object.assign(I18N.ka,{cartT:"თქვენი შეკვეთა",cartEmpty:"კალათა ცარიელია — მენიუდან დაამატეთ კერძები 🍽️",addBtn:"＋",addBtnTitle:"კალათაში",added:"✓ დაემატა",pickup:"თვითწაღება",delivery:"მიწოდება",feeL:"ტაქსით მიწოდება",namePh:"თქვენი სახელი",phonePh:"ტელეფონი",addrPh:"მიწოდების მისამართი",payCash:"ნაღდი",payCard:"ბარათით მიღებისას",payPayme:"PayMe",commentPh:"კომენტარი (არასავალდებულო)",orderBtn:"შეკვეთის გაფორმება",totalL:"ჯამი",orderOk:"შეკვეთა მიღებულია!",orderOkT:"შეკვეთა უკვე საიტის ადმინშია: 5 შეხება ლოგოზე → 🛒 ონლაინ-შეკვეთები. ქვემოთ ღილაკი ასლირებს მენეჯერის WhatsApp-ში.",orderAgain:"მზადაა",waBtn:"📲 WhatsApp-ში დუბლირება",orderHint:"შეკვეთა მყისიერად ჯდება საიტის ადმინში (⚙ → 🛒). WhatsApp ღილაკი — მენეჯერმა ნებისმიერი მოწყობილობიდან ხედავდეს.",fillOrder:"შეავსეთ სახელი და ტელეფონი"});
+let CART=[];try{CART=JSON.parse(localStorage.getItem("stumari_cart")||"[]");}catch(e){CART=[];}
+let orderSeq=1;try{orderSeq=parseInt(localStorage.getItem("stumari_oseq")||"1")||1;}catch(e){}
+let oType="pickup";
+const saveCart=()=>{try{localStorage.setItem("stumari_cart",JSON.stringify(CART));}catch(e){}};
+const cartN=()=>CART.reduce((s,c)=>s+c.qty,0);
+function updCartBadge(){const n=cartN();[$("cartCount"),$("cartFabN")].forEach(b=>{if(!b)return;b.textContent=n;b.style.display=n?"flex":"none";});}
+let toastT;function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("show"),2200);}
+function addToCart(id){const m=S.menu.find(x=>x.id===id);if(!m)return;
+  const ex=CART.find(c=>c.id===id);if(ex)ex.qty++;else CART.push({id,qty:1});
+  saveCart();updCartBadge();toast("🧺 "+(m.name[S.lang]||m.name.ru)+" — "+t("added"));}
+function openCart(){$("cartView").style.display="";$("orderOk").classList.remove("on");
+  $("dFeeLbl").textContent="+"+(S.deliveryFee||0).toLocaleString("ru-RU");
+  renderCart();$("cartModal").classList.add("open");}
+function closeCart(){$("cartModal").classList.remove("open");}
+function renderCart(){
+  const box=$("cItems"),tt=$("cTotals");
+  if(!CART.length){box.innerHTML='<div class="empty">'+t("cartEmpty")+'</div>';tt.innerHTML="";return;}
+  let sub=0;
+  box.innerHTML=CART.map((c,i)=>{const m=S.menu.find(x=>x.id===c.id);if(!m)return"";
+    sub+=m.price*c.qty;
+    return '<div class="crow2"><div class="cinfo"><div class="cname">'+(m.name[S.lang]||m.name.ru)+'</div><div class="cprice">'+fmt(m.price)+" × "+c.qty+" = "+fmt(m.price*c.qty)+'</div></div><div class="qty"><button type="button" onclick="qtyC('+i+',-1)">−</button><span>'+c.qty+'</span><button type="button" onclick="qtyC('+i+',1)">＋</button></div></div>';}).join("");
+  const fee=oType==="delivery"?(S.deliveryFee||0):0;
+  tt.innerHTML='<div class="tr"><span>'+(oType==="delivery"?t("feeL")+" → 🛵":t("pickup")+" → 🛍️")+'</span><span>'+(fee?"+"+fmt(fee):"0")+'</span></div><div class="tr"><span>'+t("totalL")+'</span><b>'+fmt(sub+fee)+'</b></div>';
+}
+function qtyC(i,d){if(!CART[i])return;CART[i].qty+=d;if(CART[i].qty<=0)CART.splice(i,1);saveCart();updCartBadge();renderCart();}
+function setOType(v){oType=v;$("otP").classList.toggle("on",v==="pickup");$("otD").classList.toggle("on",v==="delivery");$("oAddr").style.display=v==="delivery"?"":"none";renderCart();}
+function waText(o){const L=["🛒 STUMARI · Заказ №"+o.num,"👤 "+o.n+" · "+o.p,(o.type==="delivery"?"🛵 Доставка: "+o.addr:"🛍️ Самовывоз"),"💳 Оплата: "+o.pay];
+  o.items.forEach(x=>L.push("• "+x.n+" ×"+x.q+" — "+x.s.toLocaleString("ru-RU")+" сум"));
+  L.push("💰 Итого: "+o.total.toLocaleString("ru-RU")+" сум");if(o.cm)L.push("💬 "+o.cm);return L.join("\n");}
+function placeOrder(){
+  if(!CART.length){toast(t("cartEmpty"));return;}
+  const okN=need($("oName")),okP=$("oPhone").value.replace(/\D/g,"").length>=7;
+  $("oPhone").classList.toggle("err-b",!okP);
+  let okA=true;
+  if(oType==="delivery")okA=need($("oAddr"));
+  if(!okN||!okP||!okA){toast(t("fillOrder"));return;}
+  let sub=0;const lines=[];
+  CART.forEach(c=>{const m=S.menu.find(x=>x.id===c.id);if(!m)return;sub+=m.price*c.qty;lines.push({n:m.name.ru,q:c.qty,s:m.price*c.qty});});
+  const fee=oType==="delivery"?(S.deliveryFee||0):0;
+  const num=1000+orderSeq++;
+  try{localStorage.setItem("stumari_oseq",orderSeq);}catch(e){}
+  const o={num:num,ts:Date.now(),n:$("oName").value.trim(),p:$("oPhone").value.trim(),type:oType,
+    addr:oType==="delivery"?$("oAddr").value.trim():"",pay:$("oPay").value,cm:$("oCm").value.trim(),
+    items:lines,sub:sub,fee:fee,total:sub+fee,st:"new"};
+  REQD.o=REQD.o||[];REQD.o.unshift(o);REQ.save(REQD);
+  $("waOrder").href="https://wa.me/"+S.phone.replace(/\D/g,"")+"?text="+encodeURIComponent(waText(o));
+  $("orderOkNum").textContent="№"+num;
+  $("cartView").style.display="none";$("orderOk").classList.add("on");
+  CART=[];saveCart();updCartBadge();if(adminOpen)buildOrders();
+}
+/* --- admin: orders tab --- */
+const OST={new:"🆕 Новый",ok:"✅ Принят",done:"🏁 Выдан"};
+const ONEXT={new:"ok",ok:"done",done:"done"};
+function buildOrders(){const w=$("ordersList");if(!w)return;w.innerHTML="";
+  const arr=REQD.o||[];
+  if(!arr.length){w.innerHTML='<div class="note">Онлайн-заказов пока нет. Они появятся здесь сразу после оформления на сайте.</div>';return;}
+  arr.forEach((o,i)=>{const d=document.createElement("div");d.className="reqitem";
+    const rb=document.createElement("div");rb.className="rb";
+    rb.innerHTML='<div class="rt">🛒 №'+o.num+" · "+new Date(o.ts).toLocaleString("ru-RU")+" · "+(o.type==="delivery"?"🛵 Доставка":"🛍️ Самовывоз")+'</div>'
+      +'<div class="rm">'+o.n+" · "+o.p+(o.addr?(" · 📍 "+o.addr):"")+" · 💳 "+o.pay+(o.cm?(" · 💬 "+o.cm):"")+'</div>'
+      +'<div class="rm">'+o.items.map(x=>"• "+x.n+" ×"+x.q+" — "+x.s.toLocaleString("ru-RU")+" сум").join(" · ")+'</div>'
+      +'<div class="rt" style="color:var(--gold)">Итого: '+o.total.toLocaleString("ru-RU")+' сум</div>';
+    const st=document.createElement("button");st.textContent=OST[o.st]||o.st;
+    st.style.cssText="border-color:var(--line);color:var(--gold2);background:rgba(232,182,76,.08)";
+    st.onclick=()=>{o.st=ONEXT[o.st]||"new";REQ.save(REQD);buildOrders();};
+    const wa=document.createElement("button");wa.textContent="📲";wa.title="WhatsApp";
+    wa.style.cssText="border-color:rgba(47,191,98,.5);color:#7fe3a4;background:rgba(47,191,98,.1)";
+    wa.onclick=()=>{open("https://wa.me/"+S.phone.replace(/\D/g,"")+"?text="+encodeURIComponent(waText(o)),"_blank");};
+    const del=document.createElement("button");del.textContent="🗑";
+    del.onclick=()=>{arr.splice(i,1);REQ.save(REQD);buildOrders();};
+    const wrap=document.createElement("div");wrap.style.cssText="display:flex;flex-direction:column;gap:6px;flex-shrink:0";
+    wrap.appendChild(st);wrap.appendChild(wa);wrap.appendChild(del);
+    d.appendChild(rb);d.appendChild(wrap);w.appendChild(d);});}
+$("cartBtn").onclick=openCart;
+$("cartFab").onclick=openCart;
+$("cartClose").onclick=closeCart;
+$("cartModal").addEventListener("click",e=>{if(e.target.id==="cartModal")closeCart();});
+$("otP").onclick=()=>setOType("pickup");
+$("otD").onclick=()=>setOType("delivery");
+$("placeBtn").onclick=placeOrder;
+$("orderDone").onclick=()=>{closeCart();setTimeout(()=>{$("cartView").style.display="";$("orderOk").classList.remove("on");},350);};
+$("ordersClear").onclick=()=>{if(confirm("Удалить ВСЕ онлайн-заказы?")){REQD.o=[];REQ.save(REQD);buildOrders();}};
+
+/* ==================== PROGRESS + LOADER ==================== */
+addEventListener("scroll",()=>{const h=document.documentElement;$("prog").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";},{passive:true});
+addEventListener("load",()=>setTimeout(()=>$("loader").classList.add("done"),1300));
+
+/* ==================== ADMIN GATE ==================== */
+let taps=0,tapT;const gate=$("admGate");
+$("logoTap").addEventListener("click",()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
+  if(taps>=5){taps=0;gate.classList.add("open");$("admPass").value="";$("admErr").textContent="";}});
+$("admEnter").onclick=()=>{
+  if($("admPass").value===S.pass){gate.classList.remove("open");openAdmin();}
+  else $("admErr").textContent="Неверный пароль";};
+$("admPass").addEventListener("keydown",e=>{if(e.key==="Enter")$("admEnter").click();});
+
+/* ==================== ADMIN ==================== */
+const ADMSECS=[["theme","🎨 Цвета и фон"],["texts","📝 Тексты (4 языка)"],["menu","🍽️ Меню и цены"],["fx","✨ Эффекты и музыка"],["tpl","🎉 Шаблоны"],["reqs","📨 Заявки"],["orders","🛒 Онлайн-заказы"],["guide","❓ Обучение"],["sys","🔧 Система"]];
+function openAdmin(){
+  adminOpen=true;$("admin").classList.add("open");document.body.style.overflow="hidden";
+  const tabs=$("admTabs");tabs.innerHTML="";
+  ADMSECS.forEach(([id,l],i)=>{const b=document.createElement("button");b.textContent=l;if(i===0)b.classList.add("on");
+    b.onclick=()=>{tabs.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+      document.querySelectorAll(".adm-sec").forEach(s=>s.classList.toggle("on",s.dataset.sec===id));};
+    tabs.appendChild(b);});
+  document.querySelectorAll(".adm-sec").forEach((s,i)=>s.classList.toggle("on",i===0));
+  loadAdmin();
+}
+$("admClose").onclick=()=>{adminOpen=false;$("admin").classList.remove("open");document.body.style.overflow="";save();applyAll();};
+function loadAdmin(){
+  const c=S.colors;
+  $("c_bg").value=c.bg;$("c_card").value=c.card;$("c_fire").value=c.fire;$("c_gold").value=c.gold;$("c_gold2").value=c.gold2;$("c_cream").value=c.cream;
+  $("r_blobSpeed").value=S.blobSpeed;$("n_blobSpeed").textContent=S.blobSpeed+" сек";
+  $("r_orna").value=S.ornaOp;$("n_orna").textContent=S.ornaOp+"%";
+  $("t_floats").value=S.floats;$("t_marquee").value=S.marquee;
+  $("f_particles").value=S.particles;$("f_musUrl").value=S.musicUrl;$("f_vol").value=S.vol;
+  $("m_globalPrice").value=49000;
+  $("s_pass").value=S.pass;$("s_phone").value=S.phone;$("s_addr").value=S.address;
+  $("s_gurl").value=S.gUrl;$("s_yurl").value=S.yUrl;
+  $("s_fee").value=S.deliveryFee||0;buildTxFields();buildMenuAdmin();buildTpls();renderTracks();buildOrn();buildReqs();buildOrders();
+  $("s_note").textContent="Изменения применяются сразу и сохраняются при закрытии панели.";
+}
+["c_bg","c_card","c_fire","c_gold","c_gold2","c_cream"].forEach(id=>$(id).addEventListener("input",e=>{
+  S.colors[id.slice(2)]=e.target.value;applyAll();}));
+$("r_blobSpeed").oninput=e=>{S.blobSpeed=+e.target.value;$("n_blobSpeed").textContent=S.blobSpeed+" сек";applyAll();};
+$("r_orna").oninput=e=>{S.ornaOp=+e.target.value;$("n_orna").textContent=S.ornaOp+"%";applyAll();};
+$("t_floats").oninput=e=>{S.floats=e.target.value;buildFloats();};
+$("t_marquee").oninput=e=>{S.marquee=e.target.value;$("mq").innerHTML=("<span>"+e.target.value+"</span>").repeat(6);};
+$("f_particles").onchange=e=>{S.particles=e.target.value;P=[];};
+$("f_vol").oninput=e=>{S.vol=+e.target.value;musEl.volume=S.vol/100;};
+$("f_musUrl").onchange=e=>{S.musicUrl=e.target.value.trim();};
+$("f_blobs").onclick=()=>{S.blobs=!S.blobs;applyAll();};
+$("f_orna").onclick=()=>{S.ornaOn=!S.ornaOn;applyAll();};
+
+/* --- requests viewer --- */
+function buildReqs(){
+  const w=$("reqsList");if(!w)return;w.innerHTML="";
+  const secs=[["🍽️ Бронирования",REQD.b,r=>r.n+" · "+r.p+" · "+(r.d||"—")+" "+(r.t||"")+" · "+r.g+" гостей"],
+              ["💼 Отклики на вакансии",REQD.v,r=>r.n+" · "+r.p+" · "+r.pos+(r.a?" — "+r.a:"")],
+              ["💌 Анонимные сообщения",REQD.f,r=>r.m]];
+  let total=0;
+  secs.forEach(([title,arr,fn])=>{
+    total+=arr.length;
+    const h=document.createElement("div");h.className="fld";
+    h.innerHTML="<label>"+title+" ("+arr.length+")</label>";w.appendChild(h);
+    arr.forEach((r,i)=>{const d=document.createElement("div");d.className="reqitem";
+      const rb=document.createElement("div");rb.className="rb";
+      const rt=document.createElement("div");rt.className="rt";rt.textContent=fn(r);
+      const rm=document.createElement("div");rm.className="rm";rm.textContent=new Date(r.ts).toLocaleString();
+      rb.appendChild(rt);rb.appendChild(rm);
+      const del=document.createElement("button");del.textContent="🗑";
+      del.onclick=()=>{arr.splice(i,1);REQ.save(REQD);buildReqs();};
+      d.appendChild(rb);d.appendChild(del);w.appendChild(d);});});
+  if(!total)w.innerHTML='<div class="note">Пока нет заявок. Бронирования, отклики и сообщения с сайта появятся здесь.</div>';
+}
+$("reqClear").onclick=()=>{if(confirm("Удалить ВСЕ заявки?")){REQD={b:[],v:[],f:[]};REQ.save(REQD);buildReqs();}};
+
+/* --- texts editor --- */
+const TXKEYS=["kicker","tagline","offer","offerSub","book","call","menuTitle","menuSub","searchPh","tabFood","tabDrinks","aboutTitle","aboutText1","aboutText2","contactsTitle","addrL","phoneL","hoursL","address","hours","footer","marquee","bookT","bookSub","fName","fPhone","fDate","fTime","fGuests","bookBtn","bookOk","bookOkT","vacT","vacSub","vacFormT","vacPos","vacAbout","vacBtn","vacOk","vacOkT","revT","revSub","revCount","gBtn","yBtn","fbT","fbSub","fbBtn","fbOk","fbOkT"];
+function buildTxFields(){const L=$("txLang").value,w=$("txFields");w.innerHTML="";
+  TXKEYS.forEach(k=>{const f=document.createElement("div");f.className="fld";
+    f.innerHTML="<label>"+k+"</label>";
+    const ta=document.createElement("textarea");ta.value=(S.txO[L]&&S.txO[L][k])||I18N[L][k]||"";
+    ta.oninput=()=>{S.txO[L]=S.txO[L]||{};S.txO[L][k]=ta.value;if(S.lang===L)applyAll();};
+    f.appendChild(ta);w.appendChild(f);});
+  const gh=document.createElement("div");gh.className="fld";gh.innerHTML="<label>Названия категорий меню</label>";w.appendChild(gh);
+  Object.keys(GR_TR).forEach(g=>{const f=document.createElement("div");f.className="fld";
+    f.innerHTML="<label>Категория: "+g+"</label>";
+    const ta=document.createElement("textarea");ta.value=(S.txO[L]&&S.txO[L]["gr:"+g])||"";
+    ta.placeholder=g;ta.oninput=()=>{S.txO[L]=S.txO[L]||{};S.txO[L]["gr:"+g]=ta.value;if(S.lang===L){renderMenu();}};
+    f.appendChild(ta);w.appendChild(f);});}
+$("txLang").onchange=buildTxFields;
+
+/* --- menu editor --- */
+function buildMenuAdmin(){const w=$("m_list");w.innerHTML="";
+  S.menu.forEach((m,i)=>{const d=document.createElement("details");d.className="adm-item";
+    const s=document.createElement("summary");s.textContent=(m.icon||"")+" "+(m.name.ru||"")+" — "+m.price.toLocaleString("ru-RU")+" сум";d.appendChild(s);
+    const g=document.createElement("div");g.style.marginTop="10px";
+    const addF=(lbl,val,fn,type)=>{const f=document.createElement("div");f.className="fld";f.innerHTML="<label>"+lbl+"</label>";
+      const inp=document.createElement("input");inp.type=type||"text";inp.value=val;inp.oninput=()=>fn(inp.value);f.appendChild(inp);g.appendChild(f);};
+    addF("Группа",m.gr,v=>m.gr=v);
+    addF("Эмодзи",m.icon,v=>m.icon=v);
+    addF("Выход (вес)",m.w||"",v=>m.w=v);
+    addF("Цена (сум)",m.price,v=>m.price=+v||0,"number");
+    ["ru","en","uz","ka"].forEach(L=>{addF("Название ["+L.toUpperCase()+"]",m.name[L]||"",v=>m.name[L]=v);
+      addF("Описание ["+L.toUpperCase()+"]",m.desc[L]||"",v=>m.desc[L]=v);});
+    const del=document.createElement("button");del.className="del";del.textContent="🗑 Удалить блюдо";
+    del.onclick=()=>{if(confirm("Удалить «"+m.name.ru+"»?")){S.menu.splice(i,1);buildMenuAdmin();renderMenu();}};
+    g.appendChild(del);d.appendChild(g);w.appendChild(d);});}
+$("m_add").onclick=()=>{if(!$("m_newName").value.trim())return;
+  S.menu.push({id:Date.now(),cat:$("m_newCat").value,gr:$("m_newGroup").value.trim()||"Новое",grb:"",icon:"🍽️",w:"",price:+$("m_globalPrice").value||49000,
+    name:{ru:$("m_newName").value.trim(),en:$("m_newName").value.trim(),uz:$("m_newName").value.trim(),ka:$("m_newName").value.trim()},
+    desc:{ru:"",en:"",uz:"",ka:""}});
+  $("m_newName").value="";$("m_newGroup").value="";buildMenuAdmin();renderMenu();};
+$("m_globalPrice").onchange=e=>{const v=+e.target.value||49000;S.menu.forEach(m=>{if(m.price===49000)m.price=v;});buildMenuAdmin();renderMenu();};
+
+/* --- templates --- */
+function buildTpls(){const mk=(arr,el)=>{el.innerHTML="";arr.forEach(id=>{const tp=TPL[id];
+  const b=document.createElement("button");b.className="tpl";b.innerHTML="<span class='te'>"+tp.te+"</span>"+tp.label;
+  b.onclick=()=>{S.colors=Object.assign({},tp.colors);S.particles=tp.particles;S.floats=tp.floats;P=[];
+    if(tp.orna){S.orna=tp.orna;applyOrn();}
+    loadAdmin();applyAll();$("s_note").textContent="Применён шаблон: "+tp.label;};el.appendChild(b);});};
+  mk(HOLIDAYS,$("tplHoliday"));mk(SEASONS,$("tplSeason"));mk(MONTHS,$("tplMonth"));}
+
+/* --- system --- */
+$("s_save").onclick=()=>{S.pass=$("s_pass").value||S.pass;S.phone=$("s_phone").value.replace(/[^\d+]/g,"")||S.phone;S.address=$("s_addr").value;
+  S.gUrl=$("s_gurl").value.trim()||S.gUrl;S.yUrl=$("s_yurl").value.trim()||S.yUrl;
+  S.deliveryFee=Math.max(0,parseInt($("s_fee").value)||0);
+  save();applyAll();$("s_note").textContent="✅ Сохранено "+new Date().toLocaleTimeString();};
+$("s_export").onclick=()=>{const b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="stumari-settings.json";a.click();};
+$("s_import").onclick=()=>$("s_file").click();
+$("s_file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d||typeof d!=="object"||Array.isArray(d))throw new Error("это не файл настроек Stumari");
+      const KEYS=Object.keys(DEF);
+      Object.keys(d).forEach(k=>{if(KEYS.indexOf(k)>=0)S[k]=d[k];});
+      S.colors=Object.assign({},DEF.colors,S.colors||{});
+      S.txO=S.txO||{};
+      if(!I18N[S.lang])S.lang="ru";
+      if(!Array.isArray(S.menu)||!S.menu.length)S.menu=JSON.parse(JSON.stringify(MENU));
+      save();applyAll();loadAdmin();
+      $("s_note").textContent="✅ Импортировано: "+f.name+" (версия "+(d.ver||"1")+")";
+    }catch(x){$("s_note").textContent="❌ Ошибка импорта: "+x.message;}
+  };
+  r.readAsText(f);
+  e.target.value="";
+};
+$("s_reset").onclick=()=>{if(confirm("Сбросить ВСЕ настройки, меню и тексты к заводским?")){localStorage.removeItem("stumari_v3");location.reload();}};
+
+/* ==================== INIT ==================== */
+if(!S.marquee)S.marquee=I18N.ru.marquee;
+applyAll();loadTracks();updCartBadge();
+</script>
+</body>
+</html>
